@@ -14,6 +14,7 @@ import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AssetsRouteImport } from './routes/assets'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as FilesRouteImport } from './routes/files'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PlannerRouteImport } from './routes/planner'
@@ -54,6 +55,11 @@ const CalendarRoute = CalendarRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FilesRoute = FilesRouteImport.update({
+  id: '/files',
+  path: '/files',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GalleryRoute = GalleryRouteImport.update({
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/assets': typeof AssetsRoute
   '/calendar': typeof CalendarRoute
   '/dashboard': typeof DashboardRoute
+  '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/planner': typeof PlannerRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/assets': typeof AssetsRoute
   '/calendar': typeof CalendarRoute
   '/dashboard': typeof DashboardRoute
+  '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/planner': typeof PlannerRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/assets': typeof AssetsRoute
   '/calendar': typeof CalendarRoute
   '/dashboard': typeof DashboardRoute
+  '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/planner': typeof PlannerRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/assets'
     | '/calendar'
     | '/dashboard'
+    | '/files'
     | '/gallery'
     | '/login'
     | '/planner'
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
     | '/assets'
     | '/calendar'
     | '/dashboard'
+    | '/files'
     | '/gallery'
     | '/login'
     | '/planner'
@@ -261,6 +272,7 @@ export interface FileRouteTypes {
     | '/assets'
     | '/calendar'
     | '/dashboard'
+    | '/files'
     | '/gallery'
     | '/login'
     | '/planner'
@@ -285,6 +297,7 @@ export interface RootRouteChildren {
   AssetsRoute: typeof AssetsRoute
   CalendarRoute: typeof CalendarRoute
   DashboardRoute: typeof DashboardRoute
+  FilesRoute: typeof FilesRoute
   GalleryRoute: typeof GalleryRoute
   LoginRoute: typeof LoginRoute
   PlannerRoute: typeof PlannerRoute
@@ -338,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/files': {
+      id: '/files'
+      path: '/files'
+      fullPath: '/files'
+      preLoaderRoute: typeof FilesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gallery': {
@@ -461,6 +481,7 @@ const rootRouteChildren: RootRouteChildren = {
   AssetsRoute: AssetsRoute,
   CalendarRoute: CalendarRoute,
   DashboardRoute: DashboardRoute,
+  FilesRoute: FilesRoute,
   GalleryRoute: GalleryRoute,
   LoginRoute: LoginRoute,
   PlannerRoute: PlannerRoute,
