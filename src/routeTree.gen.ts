@@ -17,6 +17,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StudioRouteImport } from './routes/studio'
@@ -67,6 +68,11 @@ const LoginRoute = LoginRouteImport.update({
 const PlannerRoute = PlannerRouteImport.update({
   id: '/planner',
   path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PresentationRoute = PresentationRouteImport.update({
+  id: '/presentation',
+  path: '/presentation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/planner': typeof PlannerRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/studio': typeof StudioRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/planner': typeof PlannerRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/studio': typeof StudioRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/planner': typeof PlannerRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/studio': typeof StudioRoute
@@ -200,6 +209,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/login'
     | '/planner'
+    | '/presentation'
     | '/pricing'
     | '/signup'
     | '/studio'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/login'
     | '/planner'
+    | '/presentation'
     | '/pricing'
     | '/signup'
     | '/studio'
@@ -242,6 +253,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/login'
     | '/planner'
+    | '/presentation'
     | '/pricing'
     | '/signup'
     | '/studio'
@@ -264,6 +276,7 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   LoginRoute: typeof LoginRoute
   PlannerRoute: typeof PlannerRoute
+  PresentationRoute: typeof PresentationRoute
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
   StudioRoute: typeof StudioRoute
@@ -333,6 +346,13 @@ declare module '@tanstack/react-router' {
       path: '/planner'
       fullPath: '/planner'
       preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/presentation': {
+      id: '/presentation'
+      path: '/presentation'
+      fullPath: '/presentation'
+      preLoaderRoute: typeof PresentationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -424,6 +444,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   LoginRoute: LoginRoute,
   PlannerRoute: PlannerRoute,
+  PresentationRoute: PresentationRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
   StudioRoute: StudioRoute,
