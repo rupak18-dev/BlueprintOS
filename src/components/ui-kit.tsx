@@ -43,7 +43,7 @@ export function StatCard({
   return (
     <Card className={cn("gap-0 py-4", accent && "border-brass/50 bg-accent/40")}>
       <CardContent className="px-4">
-        <p className="truncate text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground break-words">{label}</p>
         <p className="mt-2 text-xl font-bold sm:text-2xl">{value}</p>
         {hint && <p className="mt-1 truncate text-xs text-muted-foreground">{hint}</p>}
       </CardContent>
