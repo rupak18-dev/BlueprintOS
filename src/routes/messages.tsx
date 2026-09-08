@@ -27,6 +27,8 @@ const conversation = [
 ];
 
 function MessagesPage() {
+  const thread0 = threads[0]!;
+
   return (
     <AppShell>
       <PageHeader
@@ -68,7 +70,7 @@ function MessagesPage() {
           </ul>
         </Section>
 
-        <Section title={threads[0].subject} description={`${threads[0].with} · ${threads[0].project}`}>
+        <Section title={thread0.subject} description={`${thread0.with} · ${thread0.project}`}>
           <ul className="space-y-3">
             {conversation.map((m, i) => (
               <li key={i} className={`flex ${m.mine ? "justify-end" : "justify-start"}`}>

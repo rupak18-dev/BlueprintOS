@@ -24,7 +24,7 @@ const views = ["Perspective", "Top", "Front", "Walkthrough"];
 const materials = ["Fluted oak", "Micro-cement", "Terrazzo", "Antique brass", "Ivory linen", "Walnut veneer"];
 
 function StudioPage() {
-  const project = projects[0];
+  const project = projects[0]!;
 
   return (
     <AppShell>

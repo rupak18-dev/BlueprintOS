@@ -114,6 +114,7 @@ export function ResponsiveTable<T extends { id: string }>({
   }
 
   const primary = columns.find((c) => c.primary) ?? columns[0];
+  if (!primary) return null;
   const rest = columns.filter((c) => c !== primary);
 
   return (

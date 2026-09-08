@@ -21,7 +21,7 @@ export const Route = createFileRoute("/help")({
   component: HelpPage,
 });
 
-const faqs = [
+const faqs: [string, string][] = [
   ["How do I turn a won lead into a project?", "Open the lead, go to the Quotation tab and mark it won. A project is created with the rooms and estimate already carried over."],
   ["Can clients comment without an account?", "Yes. A presentation link is view-only and password protected; clients can approve rooms and leave comments without signing up."],
   ["How are seats counted?", "Every staff member with a login uses one seat. Vendor crews and clients do not consume seats."],

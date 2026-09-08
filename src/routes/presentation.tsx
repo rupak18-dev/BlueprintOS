@@ -19,7 +19,7 @@ export const Route = createFileRoute("/presentation")({
 });
 
 function PresentationPage() {
-  const project = projects[0];
+  const project = projects[0]!;
 
   return (
     <AppShell>
