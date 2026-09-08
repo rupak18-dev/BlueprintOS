@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus, ArrowRight } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip as RTooltip, XAxis, YAxis } from "recharts";
+import { StudioAreaChart } from "@/components/area-chart";
 
 import { AppShell } from "@/components/app-shell";
 import { PageHeader, Section, StatCard, StatGrid, StatusPill } from "@/components/ui-kit";
