@@ -24,6 +24,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ProcurementRouteImport } from './routes/procurement'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StudioRouteImport } from './routes/studio'
+import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as ClientsIndexRouteImport } from './routes/clients.index'
 import { Route as ClientsClientIdRouteImport } from './routes/clients.$clientId'
 import { Route as CrewIndexRouteImport } from './routes/crew.index'
@@ -108,6 +109,11 @@ const StudioRoute = StudioRouteImport.update({
   path: '/studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TasksRoute = TasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientsIndexRoute = ClientsIndexRouteImport.update({
   id: '/clients/',
   path: '/clients/',
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/procurement': typeof ProcurementRoute
   '/signup': typeof SignupRoute
   '/studio': typeof StudioRoute
+  '/tasks': typeof TasksRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/procurement': typeof ProcurementRoute
   '/signup': typeof SignupRoute
   '/studio': typeof StudioRoute
+  '/tasks': typeof TasksRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -216,6 +224,7 @@ export interface FileRoutesById {
   '/procurement': typeof ProcurementRoute
   '/signup': typeof SignupRoute
   '/studio': typeof StudioRoute
+  '/tasks': typeof TasksRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -243,6 +252,7 @@ export interface FileRouteTypes {
     | '/procurement'
     | '/signup'
     | '/studio'
+    | '/tasks'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/procurement'
     | '/signup'
     | '/studio'
+    | '/tasks'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/procurement'
     | '/signup'
     | '/studio'
+    | '/tasks'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   ProcurementRoute: typeof ProcurementRoute
   SignupRoute: typeof SignupRoute
   StudioRoute: typeof StudioRoute
+  TasksRoute: typeof TasksRoute
   ClientsClientIdRoute: typeof ClientsClientIdRoute
   CrewMemberIdRoute: typeof CrewMemberIdRoute
   LeadsLeadIdRoute: typeof LeadsLeadIdRoute
@@ -436,6 +449,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tasks': {
+      id: '/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof TasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clients/': {
       id: '/clients/'
       path: '/clients'
@@ -511,6 +531,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProcurementRoute: ProcurementRoute,
   SignupRoute: SignupRoute,
   StudioRoute: StudioRoute,
+  TasksRoute: TasksRoute,
   ClientsClientIdRoute: ClientsClientIdRoute,
   CrewMemberIdRoute: CrewMemberIdRoute,
   LeadsLeadIdRoute: LeadsLeadIdRoute,
