@@ -21,7 +21,7 @@ export function PageHeader({
         {eyebrow && (
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{eyebrow}</p>
         )}
-        <h1 className="truncate text-xl font-bold sm:text-2xl lg:text-3xl">{title}</h1>
+        <h1 className="text-xl font-bold break-words sm:truncate sm:text-2xl lg:text-3xl">{title}</h1>
         {subtitle && <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
       </div>
       {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
@@ -43,7 +43,7 @@ export function StatCard({
   return (
     <Card className={cn("gap-0 py-4", accent && "border-brass/50 bg-accent/40")}>
       <CardContent className="px-4">
-        <p className="truncate text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground break-words">{label}</p>
         <p className="mt-2 text-xl font-bold sm:text-2xl">{value}</p>
         {hint && <p className="mt-1 truncate text-xs text-muted-foreground">{hint}</p>}
       </CardContent>
@@ -114,6 +114,7 @@ export function ResponsiveTable<T extends { id: string }>({
   }
 
   const primary = columns.find((c) => c.primary) ?? columns[0];
+  if (!primary) return null;
   const rest = columns.filter((c) => c !== primary);
 
   return (

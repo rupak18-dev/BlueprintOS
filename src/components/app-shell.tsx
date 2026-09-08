@@ -31,7 +31,7 @@ function useActivePath() {
   return useRouterState({ select: (s) => s.location.pathname });
 }
 
-function NavLink({ item, compact, onNavigate }: { item: NavItem; compact?: boolean; onNavigate?: () => void }) {
+function NavLink({ item, compact, onNavigate }: { item: NavItem; compact?: boolean; onNavigate?: (() => void) | undefined }) {
   const pathname = useActivePath();
   const active = pathname === item.to || pathname.startsWith(item.to + "/");
   const Icon = item.icon;
@@ -62,7 +62,7 @@ function NavLink({ item, compact, onNavigate }: { item: NavItem; compact?: boole
   );
 }
 
-function SidebarBody({ compact = false, onNavigate }: { compact?: boolean; onNavigate?: () => void }) {
+function SidebarBody({ compact = false, onNavigate }: { compact?: boolean; onNavigate?: (() => void) | undefined }) {
   return (
     <div className="flex h-full flex-col gap-1 bg-sidebar">
       <div className={cn("flex h-16 items-center border-b border-sidebar-border px-4", compact && "justify-center px-0")}>

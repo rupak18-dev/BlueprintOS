@@ -14,11 +14,21 @@ import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AssetsRouteImport } from './routes/assets'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as FilesRouteImport } from './routes/files'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as ProcurementRouteImport } from './routes/procurement'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as StudioRouteImport } from './routes/studio'
+import { Route as StudioPlanRouteImport } from './routes/studio-plan'
+import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as ClientsIndexRouteImport } from './routes/clients.index'
 import { Route as ClientsClientIdRouteImport } from './routes/clients.$clientId'
 import { Route as CrewIndexRouteImport } from './routes/crew.index'
@@ -53,9 +63,19 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FilesRoute = FilesRouteImport.update({
+  id: '/files',
+  path: '/files',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -63,9 +83,24 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlannerRoute = PlannerRouteImport.update({
   id: '/planner',
   path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PresentationRoute = PresentationRouteImport.update({
+  id: '/presentation',
+  path: '/presentation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -73,9 +108,34 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProcurementRoute = ProcurementRouteImport.update({
+  id: '/procurement',
+  path: '/procurement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioPlanRoute = StudioPlanRouteImport.update({
+  id: '/studio-plan',
+  path: '/studio-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TasksRoute = TasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientsIndexRoute = ClientsIndexRouteImport.update({
@@ -125,11 +185,21 @@ export interface FileRoutesByFullPath {
   '/assets': typeof AssetsRoute
   '/calendar': typeof CalendarRoute
   '/dashboard': typeof DashboardRoute
+  '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
+  '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/planner': typeof PlannerRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
+  '/procurement': typeof ProcurementRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
+  '/studio': typeof StudioRoute
+  '/studio-plan': typeof StudioPlanRoute
+  '/tasks': typeof TasksRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -145,11 +215,21 @@ export interface FileRoutesByTo {
   '/assets': typeof AssetsRoute
   '/calendar': typeof CalendarRoute
   '/dashboard': typeof DashboardRoute
+  '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
+  '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/planner': typeof PlannerRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
+  '/procurement': typeof ProcurementRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
+  '/studio': typeof StudioRoute
+  '/studio-plan': typeof StudioPlanRoute
+  '/tasks': typeof TasksRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -166,11 +246,21 @@ export interface FileRoutesById {
   '/assets': typeof AssetsRoute
   '/calendar': typeof CalendarRoute
   '/dashboard': typeof DashboardRoute
+  '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
+  '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/planner': typeof PlannerRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
+  '/procurement': typeof ProcurementRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
+  '/studio': typeof StudioRoute
+  '/studio-plan': typeof StudioPlanRoute
+  '/tasks': typeof TasksRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -188,11 +278,21 @@ export interface FileRouteTypes {
     | '/assets'
     | '/calendar'
     | '/dashboard'
+    | '/files'
     | '/gallery'
+    | '/help'
     | '/login'
+    | '/messages'
+    | '/notifications'
     | '/planner'
+    | '/presentation'
     | '/pricing'
+    | '/procurement'
+    | '/profile'
     | '/signup'
+    | '/studio'
+    | '/studio-plan'
+    | '/tasks'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -208,11 +308,21 @@ export interface FileRouteTypes {
     | '/assets'
     | '/calendar'
     | '/dashboard'
+    | '/files'
     | '/gallery'
+    | '/help'
     | '/login'
+    | '/messages'
+    | '/notifications'
     | '/planner'
+    | '/presentation'
     | '/pricing'
+    | '/procurement'
+    | '/profile'
     | '/signup'
+    | '/studio'
+    | '/studio-plan'
+    | '/tasks'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -228,11 +338,21 @@ export interface FileRouteTypes {
     | '/assets'
     | '/calendar'
     | '/dashboard'
+    | '/files'
     | '/gallery'
+    | '/help'
     | '/login'
+    | '/messages'
+    | '/notifications'
     | '/planner'
+    | '/presentation'
     | '/pricing'
+    | '/procurement'
+    | '/profile'
     | '/signup'
+    | '/studio'
+    | '/studio-plan'
+    | '/tasks'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -249,11 +369,21 @@ export interface RootRouteChildren {
   AssetsRoute: typeof AssetsRoute
   CalendarRoute: typeof CalendarRoute
   DashboardRoute: typeof DashboardRoute
+  FilesRoute: typeof FilesRoute
   GalleryRoute: typeof GalleryRoute
+  HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
+  MessagesRoute: typeof MessagesRoute
+  NotificationsRoute: typeof NotificationsRoute
   PlannerRoute: typeof PlannerRoute
+  PresentationRoute: typeof PresentationRoute
   PricingRoute: typeof PricingRoute
+  ProcurementRoute: typeof ProcurementRoute
+  ProfileRoute: typeof ProfileRoute
   SignupRoute: typeof SignupRoute
+  StudioRoute: typeof StudioRoute
+  StudioPlanRoute: typeof StudioPlanRoute
+  TasksRoute: typeof TasksRoute
   ClientsClientIdRoute: typeof ClientsClientIdRoute
   CrewMemberIdRoute: typeof CrewMemberIdRoute
   LeadsLeadIdRoute: typeof LeadsLeadIdRoute
@@ -301,11 +431,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/files': {
+      id: '/files'
+      path: '/files'
+      fullPath: '/files'
+      preLoaderRoute: typeof FilesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gallery': {
       id: '/gallery'
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -315,11 +459,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/planner': {
       id: '/planner'
       path: '/planner'
       fullPath: '/planner'
       preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/presentation': {
+      id: '/presentation'
+      path: '/presentation'
+      fullPath: '/presentation'
+      preLoaderRoute: typeof PresentationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -329,11 +494,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/procurement': {
+      id: '/procurement'
+      path: '/procurement'
+      fullPath: '/procurement'
+      preLoaderRoute: typeof ProcurementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio-plan': {
+      id: '/studio-plan'
+      path: '/studio-plan'
+      fullPath: '/studio-plan'
+      preLoaderRoute: typeof StudioPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tasks': {
+      id: '/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof TasksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clients/': {
@@ -401,11 +601,21 @@ const rootRouteChildren: RootRouteChildren = {
   AssetsRoute: AssetsRoute,
   CalendarRoute: CalendarRoute,
   DashboardRoute: DashboardRoute,
+  FilesRoute: FilesRoute,
   GalleryRoute: GalleryRoute,
+  HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
+  MessagesRoute: MessagesRoute,
+  NotificationsRoute: NotificationsRoute,
   PlannerRoute: PlannerRoute,
+  PresentationRoute: PresentationRoute,
   PricingRoute: PricingRoute,
+  ProcurementRoute: ProcurementRoute,
+  ProfileRoute: ProfileRoute,
   SignupRoute: SignupRoute,
+  StudioRoute: StudioRoute,
+  StudioPlanRoute: StudioPlanRoute,
+  TasksRoute: TasksRoute,
   ClientsClientIdRoute: ClientsClientIdRoute,
   CrewMemberIdRoute: CrewMemberIdRoute,
   LeadsLeadIdRoute: LeadsLeadIdRoute,
