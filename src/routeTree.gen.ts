@@ -16,6 +16,7 @@ import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ClientsIndexRouteImport } from './routes/clients.index'
@@ -60,6 +61,11 @@ const GalleryRoute = GalleryRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
+  '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
+  '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
+  '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/gallery'
     | '/login'
+    | '/planner'
     | '/pricing'
     | '/signup'
     | '/clients/$clientId'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/gallery'
     | '/login'
+    | '/planner'
     | '/pricing'
     | '/signup'
     | '/clients/$clientId'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/gallery'
     | '/login'
+    | '/planner'
     | '/pricing'
     | '/signup'
     | '/clients/$clientId'
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   GalleryRoute: typeof GalleryRoute
   LoginRoute: typeof LoginRoute
+  PlannerRoute: typeof PlannerRoute
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
   ClientsClientIdRoute: typeof ClientsClientIdRoute
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -383,6 +403,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   GalleryRoute: GalleryRoute,
   LoginRoute: LoginRoute,
+  PlannerRoute: PlannerRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
   ClientsClientIdRoute: ClientsClientIdRoute,
