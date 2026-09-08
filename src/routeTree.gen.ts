@@ -16,6 +16,7 @@ import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FilesRouteImport } from './routes/files'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NotificationsRouteImport } from './routes/notifications'
@@ -70,6 +71,11 @@ const FilesRoute = FilesRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -181,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -210,6 +217,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -240,6 +248,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/files': typeof FilesRoute
   '/gallery': typeof GalleryRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -271,6 +280,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/files'
     | '/gallery'
+    | '/help'
     | '/login'
     | '/messages'
     | '/notifications'
@@ -300,6 +310,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/files'
     | '/gallery'
+    | '/help'
     | '/login'
     | '/messages'
     | '/notifications'
@@ -329,6 +340,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/files'
     | '/gallery'
+    | '/help'
     | '/login'
     | '/messages'
     | '/notifications'
@@ -359,6 +371,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   FilesRoute: typeof FilesRoute
   GalleryRoute: typeof GalleryRoute
+  HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
   MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -430,6 +443,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -583,6 +603,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   FilesRoute: FilesRoute,
   GalleryRoute: GalleryRoute,
+  HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
   MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRoute,
