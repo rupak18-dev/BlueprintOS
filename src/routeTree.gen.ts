@@ -19,6 +19,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as StudioRouteImport } from './routes/studio'
 import { Route as ClientsIndexRouteImport } from './routes/clients.index'
 import { Route as ClientsClientIdRouteImport } from './routes/clients.$clientId'
 import { Route as CrewIndexRouteImport } from './routes/crew.index'
@@ -78,6 +79,11 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientsIndexRoute = ClientsIndexRouteImport.update({
   id: '/clients/',
   path: '/clients/',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/studio': typeof StudioRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/studio': typeof StudioRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/studio': typeof StudioRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/crew/$memberId': typeof CrewMemberIdRoute
   '/leads/$leadId': typeof LeadsLeadIdRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/planner'
     | '/pricing'
     | '/signup'
+    | '/studio'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/planner'
     | '/pricing'
     | '/signup'
+    | '/studio'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/planner'
     | '/pricing'
     | '/signup'
+    | '/studio'
     | '/clients/$clientId'
     | '/crew/$memberId'
     | '/leads/$leadId'
@@ -254,6 +266,7 @@ export interface RootRouteChildren {
   PlannerRoute: typeof PlannerRoute
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
+  StudioRoute: typeof StudioRoute
   ClientsClientIdRoute: typeof ClientsClientIdRoute
   CrewMemberIdRoute: typeof CrewMemberIdRoute
   LeadsLeadIdRoute: typeof LeadsLeadIdRoute
@@ -336,6 +349,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clients/': {
       id: '/clients/'
       path: '/clients'
@@ -406,6 +426,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlannerRoute: PlannerRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
+  StudioRoute: StudioRoute,
   ClientsClientIdRoute: ClientsClientIdRoute,
   CrewMemberIdRoute: CrewMemberIdRoute,
   LeadsLeadIdRoute: LeadsLeadIdRoute,
