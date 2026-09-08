@@ -10,33 +10,258 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountsRouteImport } from './routes/accounts'
+import { Route as AssetsRouteImport } from './routes/assets'
+import { Route as CalendarRouteImport } from './routes/calendar'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ClientsIndexRouteImport } from './routes/clients.index'
+import { Route as ClientsClientIdRouteImport } from './routes/clients.$clientId'
+import { Route as CrewIndexRouteImport } from './routes/crew.index'
+import { Route as CrewMemberIdRouteImport } from './routes/crew.$memberId'
+import { Route as LeadsIndexRouteImport } from './routes/leads.index'
+import { Route as LeadsLeadIdRouteImport } from './routes/leads.$leadId'
+import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountsRoute = AccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssetsRoute = AssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientsIndexRoute = ClientsIndexRouteImport.update({
+  id: '/clients/',
+  path: '/clients/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientsClientIdRoute = ClientsClientIdRouteImport.update({
+  id: '/clients/$clientId',
+  path: '/clients/$clientId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrewIndexRoute = CrewIndexRouteImport.update({
+  id: '/crew/',
+  path: '/crew/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrewMemberIdRoute = CrewMemberIdRouteImport.update({
+  id: '/crew/$memberId',
+  path: '/crew/$memberId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadsIndexRoute = LeadsIndexRouteImport.update({
+  id: '/leads/',
+  path: '/leads/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadsLeadIdRoute = LeadsLeadIdRouteImport.update({
+  id: '/leads/$leadId',
+  path: '/leads/$leadId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsProjectIdRoute = ProjectsProjectIdRouteImport.update({
+  id: '/projects/$projectId',
+  path: '/projects/$projectId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/assets': typeof AssetsRoute
+  '/calendar': typeof CalendarRoute
+  '/dashboard': typeof DashboardRoute
+  '/gallery': typeof GalleryRoute
+  '/login': typeof LoginRoute
+  '/planner': typeof PlannerRoute
+  '/pricing': typeof PricingRoute
+  '/signup': typeof SignupRoute
+  '/clients/$clientId': typeof ClientsClientIdRoute
+  '/crew/$memberId': typeof CrewMemberIdRoute
+  '/leads/$leadId': typeof LeadsLeadIdRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
+  '/clients/': typeof ClientsIndexRoute
+  '/crew/': typeof CrewIndexRoute
+  '/leads/': typeof LeadsIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/assets': typeof AssetsRoute
+  '/calendar': typeof CalendarRoute
+  '/dashboard': typeof DashboardRoute
+  '/gallery': typeof GalleryRoute
+  '/login': typeof LoginRoute
+  '/planner': typeof PlannerRoute
+  '/pricing': typeof PricingRoute
+  '/signup': typeof SignupRoute
+  '/clients/$clientId': typeof ClientsClientIdRoute
+  '/crew/$memberId': typeof CrewMemberIdRoute
+  '/leads/$leadId': typeof LeadsLeadIdRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
+  '/clients': typeof ClientsIndexRoute
+  '/crew': typeof CrewIndexRoute
+  '/leads': typeof LeadsIndexRoute
+  '/projects': typeof ProjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/assets': typeof AssetsRoute
+  '/calendar': typeof CalendarRoute
+  '/dashboard': typeof DashboardRoute
+  '/gallery': typeof GalleryRoute
+  '/login': typeof LoginRoute
+  '/planner': typeof PlannerRoute
+  '/pricing': typeof PricingRoute
+  '/signup': typeof SignupRoute
+  '/clients/$clientId': typeof ClientsClientIdRoute
+  '/crew/$memberId': typeof CrewMemberIdRoute
+  '/leads/$leadId': typeof LeadsLeadIdRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
+  '/clients/': typeof ClientsIndexRoute
+  '/crew/': typeof CrewIndexRoute
+  '/leads/': typeof LeadsIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/accounts'
+    | '/assets'
+    | '/calendar'
+    | '/dashboard'
+    | '/gallery'
+    | '/login'
+    | '/planner'
+    | '/pricing'
+    | '/signup'
+    | '/clients/$clientId'
+    | '/crew/$memberId'
+    | '/leads/$leadId'
+    | '/projects/$projectId'
+    | '/clients/'
+    | '/crew/'
+    | '/leads/'
+    | '/projects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/accounts'
+    | '/assets'
+    | '/calendar'
+    | '/dashboard'
+    | '/gallery'
+    | '/login'
+    | '/planner'
+    | '/pricing'
+    | '/signup'
+    | '/clients/$clientId'
+    | '/crew/$memberId'
+    | '/leads/$leadId'
+    | '/projects/$projectId'
+    | '/clients'
+    | '/crew'
+    | '/leads'
+    | '/projects'
+  id:
+    | '__root__'
+    | '/'
+    | '/accounts'
+    | '/assets'
+    | '/calendar'
+    | '/dashboard'
+    | '/gallery'
+    | '/login'
+    | '/planner'
+    | '/pricing'
+    | '/signup'
+    | '/clients/$clientId'
+    | '/crew/$memberId'
+    | '/leads/$leadId'
+    | '/projects/$projectId'
+    | '/clients/'
+    | '/crew/'
+    | '/leads/'
+    | '/projects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountsRoute: typeof AccountsRoute
+  AssetsRoute: typeof AssetsRoute
+  CalendarRoute: typeof CalendarRoute
+  DashboardRoute: typeof DashboardRoute
+  GalleryRoute: typeof GalleryRoute
+  LoginRoute: typeof LoginRoute
+  PlannerRoute: typeof PlannerRoute
+  PricingRoute: typeof PricingRoute
+  SignupRoute: typeof SignupRoute
+  ClientsClientIdRoute: typeof ClientsClientIdRoute
+  CrewMemberIdRoute: typeof CrewMemberIdRoute
+  LeadsLeadIdRoute: typeof LeadsLeadIdRoute
+  ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
+  ClientsIndexRoute: typeof ClientsIndexRoute
+  CrewIndexRoute: typeof CrewIndexRoute
+  LeadsIndexRoute: typeof LeadsIndexRoute
+  ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +273,147 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/accounts': {
+      id: '/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assets': {
+      id: '/assets'
+      path: '/assets'
+      fullPath: '/assets'
+      preLoaderRoute: typeof AssetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/clients/': {
+      id: '/clients/'
+      path: '/clients'
+      fullPath: '/clients/'
+      preLoaderRoute: typeof ClientsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/clients/$clientId': {
+      id: '/clients/$clientId'
+      path: '/clients/$clientId'
+      fullPath: '/clients/$clientId'
+      preLoaderRoute: typeof ClientsClientIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crew/': {
+      id: '/crew/'
+      path: '/crew'
+      fullPath: '/crew/'
+      preLoaderRoute: typeof CrewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crew/$memberId': {
+      id: '/crew/$memberId'
+      path: '/crew/$memberId'
+      fullPath: '/crew/$memberId'
+      preLoaderRoute: typeof CrewMemberIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leads/': {
+      id: '/leads/'
+      path: '/leads'
+      fullPath: '/leads/'
+      preLoaderRoute: typeof LeadsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leads/$leadId': {
+      id: '/leads/$leadId'
+      path: '/leads/$leadId'
+      fullPath: '/leads/$leadId'
+      preLoaderRoute: typeof LeadsLeadIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/': {
+      id: '/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/$projectId': {
+      id: '/projects/$projectId'
+      path: '/projects/$projectId'
+      fullPath: '/projects/$projectId'
+      preLoaderRoute: typeof ProjectsProjectIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountsRoute: AccountsRoute,
+  AssetsRoute: AssetsRoute,
+  CalendarRoute: CalendarRoute,
+  DashboardRoute: DashboardRoute,
+  GalleryRoute: GalleryRoute,
+  LoginRoute: LoginRoute,
+  PlannerRoute: PlannerRoute,
+  PricingRoute: PricingRoute,
+  SignupRoute: SignupRoute,
+  ClientsClientIdRoute: ClientsClientIdRoute,
+  CrewMemberIdRoute: CrewMemberIdRoute,
+  LeadsLeadIdRoute: LeadsLeadIdRoute,
+  ProjectsProjectIdRoute: ProjectsProjectIdRoute,
+  ClientsIndexRoute: ClientsIndexRoute,
+  CrewIndexRoute: CrewIndexRoute,
+  LeadsIndexRoute: LeadsIndexRoute,
+  ProjectsIndexRoute: ProjectsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
