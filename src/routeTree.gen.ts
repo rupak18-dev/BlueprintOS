@@ -18,6 +18,7 @@ import { Route as FilesRouteImport } from './routes/files'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -77,6 +78,11 @@ const LoginRoute = LoginRouteImport.update({
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlannerRoute = PlannerRouteImport.update({
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/planner': typeof PlannerRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/planner': typeof PlannerRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
@@ -218,6 +226,7 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/planner': typeof PlannerRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
@@ -246,6 +255,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/login'
     | '/messages'
+    | '/notifications'
     | '/planner'
     | '/presentation'
     | '/pricing'
@@ -272,6 +282,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/login'
     | '/messages'
+    | '/notifications'
     | '/planner'
     | '/presentation'
     | '/pricing'
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/login'
     | '/messages'
+    | '/notifications'
     | '/planner'
     | '/presentation'
     | '/pricing'
@@ -325,6 +337,7 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   LoginRoute: typeof LoginRoute
   MessagesRoute: typeof MessagesRoute
+  NotificationsRoute: typeof NotificationsRoute
   PlannerRoute: typeof PlannerRoute
   PresentationRoute: typeof PresentationRoute
   PricingRoute: typeof PricingRoute
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/planner': {
@@ -525,6 +545,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   LoginRoute: LoginRoute,
   MessagesRoute: MessagesRoute,
+  NotificationsRoute: NotificationsRoute,
   PlannerRoute: PlannerRoute,
   PresentationRoute: PresentationRoute,
   PricingRoute: PricingRoute,
