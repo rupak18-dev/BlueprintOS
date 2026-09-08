@@ -53,35 +53,7 @@ function Dashboard() {
           description="₹ lakh, last six months"
           className="xl:col-span-2"
         >
-          <div className="h-64 w-full sm:h-72">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueSeries} margin={{ left: -18, right: 8, top: 8, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="q" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-chart-1)" stopOpacity={0.45} />
-                    <stop offset="100%" stopColor="var(--color-chart-1)" stopOpacity={0.02} />
-                  </linearGradient>
-                  <linearGradient id="c" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-chart-3)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="var(--color-chart-3)" stopOpacity={0.02} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-                <XAxis dataKey="month" tickLine={false} axisLine={false} fontSize={12} />
-                <YAxis tickLine={false} axisLine={false} fontSize={12} />
-                <RTooltip
-                  contentStyle={{
-                    background: "var(--color-popover)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: 12,
-                    fontSize: 12,
-                  }}
-                />
-                <Area dataKey="quoted" stroke="var(--color-chart-1)" fill="url(#q)" strokeWidth={2} />
-                <Area dataKey="collected" stroke="var(--color-chart-3)" fill="url(#c)" strokeWidth={2} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <StudioAreaChart data={revenueSeries} />
         </Section>
 
         <Section title="Lead pipeline" description="Count and value by stage">
