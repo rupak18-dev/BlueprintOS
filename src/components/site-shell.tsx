@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { Menu, Sparkles } from "lucide-react";
 
 import { studio } from "@/data/mock";
@@ -50,7 +50,11 @@ export function SiteShell({ children }: { children: ReactNode }) {
               <SheetContent side="right" className="w-72">
                 <SheetTitle className="px-4 pt-4">Menu</SheetTitle>
                 <nav className="flex flex-col gap-1 p-3">
-                  {[...links, { label: "Log in", to: "/login" }, { label: "Sign up", to: "/signup" }].map((l) => (
+                  {[
+                    ...links,
+                    { label: "Log in", to: "/login" },
+                    { label: "Sign up", to: "/signup" },
+                  ].map((l) => (
                     <Link
                       key={l.to}
                       to={l.to}
@@ -75,9 +79,15 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <p className="text-sm font-bold">{studio.name}</p>
             <p className="mt-2 text-sm text-muted-foreground">{studio.tagline}</p>
           </div>
-          <FooterCol title="Product" items={["Dashboard", "2D Planner", "3D / VR Studio", "Procurement"]} />
+          <FooterCol
+            title="Product"
+            items={["Dashboard", "2D Planner", "3D / VR Studio", "Procurement"]}
+          />
           <FooterCol title="Studio" items={["Pricing", "Gallery", "Help Center", "Profile"]} />
-          <FooterCol title="Contact" items={["hello@atelierverde.in", "+91 98450 00000", "Bengaluru, India"]} />
+          <FooterCol
+            title="Contact"
+            items={["hello@atelierverde.in", "+91 98450 00000", "Bengaluru, India"]}
+          />
         </div>
         <div className="border-t border-border px-4 py-4 text-center text-xs text-muted-foreground sm:px-6">
           Sample content for demonstration. © 2026 {studio.name}.

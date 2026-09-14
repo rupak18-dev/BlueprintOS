@@ -2,7 +2,14 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export function PageHeader({
   title,
@@ -19,9 +26,13 @@ export function PageHeader({
     <header className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 sm:flex sm:flex-wrap sm:items-end sm:justify-between">
       <div className="min-w-0">
         {eyebrow && (
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{eyebrow}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            {eyebrow}
+          </p>
         )}
-        <h1 className="text-xl font-bold break-words sm:truncate sm:text-2xl lg:text-3xl">{title}</h1>
+        <h1 className="text-xl font-bold break-words sm:truncate sm:text-2xl lg:text-3xl">
+          {title}
+        </h1>
         {subtitle && <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
       </div>
       {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
@@ -43,7 +54,9 @@ export function StatCard({
   return (
     <Card className={cn("gap-0 py-4", accent && "border-brass/50 bg-accent/40")}>
       <CardContent className="px-4">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground break-words">{label}</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground break-words">
+          {label}
+        </p>
         <p className="mt-2 text-xl font-bold sm:text-2xl">{value}</p>
         {hint && <p className="mt-1 truncate text-xs text-muted-foreground">{hint}</p>}
       </CardContent>
@@ -107,7 +120,13 @@ export function ResponsiveTable<T extends { id: string }>({
   empty?: string;
 }) {
   const hideClass = (hide?: Column<T>["hide"]) =>
-    hide === "md" ? "hidden md:table-cell" : hide === "lg" ? "hidden lg:table-cell" : hide === "xl" ? "hidden xl:table-cell" : "";
+    hide === "md"
+      ? "hidden md:table-cell"
+      : hide === "lg"
+        ? "hidden lg:table-cell"
+        : hide === "xl"
+          ? "hidden xl:table-cell"
+          : "";
 
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-muted-foreground">{empty}</p>;
@@ -124,7 +143,10 @@ export function ResponsiveTable<T extends { id: string }>({
           <TableHeader>
             <TableRow>
               {columns.map((c) => (
-                <TableHead key={c.key} className={cn(hideClass(c.hide), c.align === "right" && "text-right")}>
+                <TableHead
+                  key={c.key}
+                  className={cn(hideClass(c.hide), c.align === "right" && "text-right")}
+                >
                   {c.header}
                 </TableHead>
               ))}
@@ -136,7 +158,11 @@ export function ResponsiveTable<T extends { id: string }>({
                 {columns.map((c) => (
                   <TableCell
                     key={c.key}
-                    className={cn(hideClass(c.hide), c.align === "right" && "text-right", c.primary && "font-medium")}
+                    className={cn(
+                      hideClass(c.hide),
+                      c.align === "right" && "text-right",
+                      c.primary && "font-medium",
+                    )}
                   >
                     {c.cell(row)}
                   </TableCell>
@@ -157,7 +183,9 @@ export function ResponsiveTable<T extends { id: string }>({
             <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2">
               {rest.map((c) => (
                 <div key={c.key} className="min-w-0">
-                  <dt className="truncate text-[11px] uppercase tracking-wide text-muted-foreground">{c.header}</dt>
+                  <dt className="truncate text-[11px] uppercase tracking-wide text-muted-foreground">
+                    {c.header}
+                  </dt>
                   <dd className="mt-0.5 truncate text-sm">{c.cell(row)}</dd>
                 </div>
               ))}
@@ -185,7 +213,13 @@ const toneMap: Record<string, string> = {
 
 export function StatusPill({ value }: { value: string }) {
   return (
-    <Badge variant="outline" className={cn("whitespace-nowrap font-medium", toneMap[value] ?? "bg-muted text-muted-foreground")}>
+    <Badge
+      variant="outline"
+      className={cn(
+        "whitespace-nowrap font-medium",
+        toneMap[value] ?? "bg-muted text-muted-foreground",
+      )}
+    >
       {value}
     </Badge>
   );

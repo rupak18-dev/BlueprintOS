@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, Search, Bell, Plus, Sun, Moon, Sparkles } from "lucide-react";
 
 import { navGroups, mobileBarItems, type NavItem } from "@/components/nav-config";
@@ -19,8 +19,12 @@ function Brand({ compact = false }: { compact?: boolean }) {
       </span>
       {!compact && (
         <span className="min-w-0">
-          <span className="block truncate text-sm font-bold text-sidebar-foreground">{studio.name}</span>
-          <span className="block truncate text-[11px] text-sidebar-foreground/60">{studio.plan}</span>
+          <span className="block truncate text-sm font-bold text-sidebar-foreground">
+            {studio.name}
+          </span>
+          <span className="block truncate text-[11px] text-sidebar-foreground/60">
+            {studio.plan}
+          </span>
         </span>
       )}
     </Link>
@@ -28,10 +32,18 @@ function Brand({ compact = false }: { compact?: boolean }) {
 }
 
 function useActivePath() {
-  return useRouterState({ select: (s) => s.location.pathname });
+  return useLocation().pathname;
 }
 
-function NavLink({ item, compact, onNavigate }: { item: NavItem; compact?: boolean; onNavigate?: (() => void) | undefined }) {
+function NavLink({
+  item,
+  compact,
+  onNavigate,
+}: {
+  item: NavItem;
+  compact?: boolean;
+  onNavigate?: (() => void) | undefined;
+}) {
   const pathname = useActivePath();
   const active = pathname === item.to || pathname.startsWith(item.to + "/");
   const Icon = item.icon;
@@ -62,10 +74,21 @@ function NavLink({ item, compact, onNavigate }: { item: NavItem; compact?: boole
   );
 }
 
-function SidebarBody({ compact = false, onNavigate }: { compact?: boolean; onNavigate?: (() => void) | undefined }) {
+function SidebarBody({
+  compact = false,
+  onNavigate,
+}: {
+  compact?: boolean;
+  onNavigate?: (() => void) | undefined;
+}) {
   return (
     <div className="flex h-full flex-col gap-1 bg-sidebar">
-      <div className={cn("flex h-16 items-center border-b border-sidebar-border px-4", compact && "justify-center px-0")}>
+      <div
+        className={cn(
+          "flex h-16 items-center border-b border-sidebar-border px-4",
+          compact && "justify-center px-0",
+        )}
+      >
         <Brand compact={compact} />
       </div>
       <nav className="flex-1 space-y-5 overflow-y-auto px-2 py-4">
@@ -85,7 +108,9 @@ function SidebarBody({ compact = false, onNavigate }: { compact?: boolean; onNav
       <div className={cn("border-t border-sidebar-border p-3", compact && "px-2")}>
         <div className={cn("flex min-w-0 items-center gap-3", compact && "justify-center")}>
           <Avatar className="size-9 shrink-0">
-            <AvatarFallback className="bg-sidebar-accent text-xs text-sidebar-accent-foreground">MN</AvatarFallback>
+            <AvatarFallback className="bg-sidebar-accent text-xs text-sidebar-accent-foreground">
+              MN
+            </AvatarFallback>
           </Avatar>
           {!compact && (
             <div className="min-w-0">

@@ -12,8 +12,12 @@ function path(values: number[], max: number, close: boolean) {
   const innerW = W - PAD.left - PAD.right;
   const innerH = H - PAD.top - PAD.bottom;
   const step = values.length > 1 ? innerW / (values.length - 1) : 0;
-  const pts = values.map((v, i) => [PAD.left + i * step, PAD.top + innerH - (v / max) * innerH] as const);
-  const line = pts.map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ");
+  const pts = values.map(
+    (v, i) => [PAD.left + i * step, PAD.top + innerH - (v / max) * innerH] as const,
+  );
+  const line = pts
+    .map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`)
+    .join(" ");
   if (!close) return line;
   const last = pts[pts.length - 1]!;
   const first = pts[0]!;
@@ -30,7 +34,12 @@ export function StudioAreaChart({ data }: { data: SeriesPoint[] }) {
 
   return (
     <figure className="m-0 w-full">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-56 w-full sm:h-64" role="img" aria-label="Quoted versus collected revenue by month">
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="h-56 w-full sm:h-64"
+        role="img"
+        aria-label="Quoted versus collected revenue by month"
+      >
         <defs>
           <linearGradient id="ac-quoted" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="var(--color-chart-1)" stopOpacity="0.45" />
@@ -54,7 +63,13 @@ export function StudioAreaChart({ data }: { data: SeriesPoint[] }) {
                 stroke="var(--color-border)"
                 strokeDasharray="3 3"
               />
-              <text x={PAD.left - 8} y={y + 4} textAnchor="end" className="fill-muted-foreground" fontSize="11">
+              <text
+                x={PAD.left - 8}
+                y={y + 4}
+                textAnchor="end"
+                className="fill-muted-foreground"
+                fontSize="11"
+              >
                 {Math.round(t * max)}
               </text>
             </g>
@@ -62,9 +77,19 @@ export function StudioAreaChart({ data }: { data: SeriesPoint[] }) {
         })}
 
         <path d={path(quoted, max, true)} fill="url(#ac-quoted)" />
-        <path d={path(quoted, max, false)} fill="none" stroke="var(--color-chart-1)" strokeWidth="2.5" />
+        <path
+          d={path(quoted, max, false)}
+          fill="none"
+          stroke="var(--color-chart-1)"
+          strokeWidth="2.5"
+        />
         <path d={path(collected, max, true)} fill="url(#ac-collected)" />
-        <path d={path(collected, max, false)} fill="none" stroke="var(--color-chart-3)" strokeWidth="2.5" />
+        <path
+          d={path(collected, max, false)}
+          fill="none"
+          stroke="var(--color-chart-3)"
+          strokeWidth="2.5"
+        />
 
         {data.map((d, i) => {
           const step = data.length > 1 ? innerW / (data.length - 1) : 0;
@@ -84,10 +109,12 @@ export function StudioAreaChart({ data }: { data: SeriesPoint[] }) {
       </svg>
       <figcaption className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
         <span className="flex items-center gap-2">
-          <span className="size-2.5 rounded-full" style={{ background: "var(--color-chart-1)" }} /> Quoted
+          <span className="size-2.5 rounded-full" style={{ background: "var(--color-chart-1)" }} />{" "}
+          Quoted
         </span>
         <span className="flex items-center gap-2">
-          <span className="size-2.5 rounded-full" style={{ background: "var(--color-chart-3)" }} /> Collected
+          <span className="size-2.5 rounded-full" style={{ background: "var(--color-chart-3)" }} />{" "}
+          Collected
         </span>
       </figcaption>
     </figure>
