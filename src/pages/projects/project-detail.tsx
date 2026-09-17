@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { files, projects, purchaseOrders, tasks, type Project } from "@/data/mock";
+import { files, projects, purchaseOrders, tasks, threads, type Project } from "@/data/mock";
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams();
@@ -32,6 +32,7 @@ export default function ProjectDetailPage() {
   const projectTasks = tasks.filter((t) => t.project === project.id);
   const projectFiles = files.filter((f) => f.project === project.id);
   const projectPOs = purchaseOrders.filter((p) => p.project === project.id);
+  const projectThreads = threads.filter((t) => t.project === project.id);
 
   return (
     <>
@@ -81,6 +82,7 @@ export default function ProjectDetailPage() {
           <TabsTrigger value="budget">Budget</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
           <TabsTrigger value="files">Files</TabsTrigger>
+          <TabsTrigger value="communication">Communication</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="grid gap-4 xl:grid-cols-3">
@@ -228,6 +230,38 @@ export default function ProjectDetailPage() {
               </ul>
             ) : (
               <p className="text-sm text-muted-foreground">No files uploaded.</p>
+            )}
+          </Section>
+        </TabsContent>
+
+        <TabsContent value="communication">
+          <Section
+            title="Communication"
+            description="Project-linked conversations with client, crew and vendors."
+          >
+            {projectThreads.length ? (
+              <ul className="space-y-3">
+                {projectThreads.map((t) => (
+                  <li key={t.id} className="min-w-0 rounded-lg border border-border p-4">
+                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
+                      <p className="truncate text-sm font-semibold">{t.subject}</p>
+                      {t.unread > 0 && (
+                        <span className="rounded-full bg-brass/20 px-2 py-0.5 text-[11px] font-semibold text-brass-foreground">
+                          {t.unread} unread
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 truncate text-xs text-muted-foreground">
+                      {t.with} · {t.last}
+                    </p>
+                    <p className="mt-1 text-[11px] text-muted-foreground">{t.when}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                No conversations for this project yet.
+              </p>
             )}
           </Section>
         </TabsContent>

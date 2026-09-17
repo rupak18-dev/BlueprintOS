@@ -43,6 +43,7 @@ import NotificationsPage from "@/pages/operations/notifications";
 import StudioPlanPage from "@/pages/settings/studio-plan";
 import ProfilePage from "@/pages/settings/profile";
 import HelpPage from "@/pages/settings/help";
+import IntegrationsPage from "@/pages/settings/integrations";
 
 export default function App() {
   return (
@@ -88,6 +89,7 @@ export default function App() {
           <Route path="/studio-plan" element={<StudioPlanPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/help" element={<HelpPage />} />
+          <Route path="/integrations" element={<IntegrationsPage />} />
         </Route>
       </Route>
 

@@ -1,5 +1,6 @@
 import {
   LayoutDashboard,
+  Home,
   CalendarDays,
   Target,
   FolderKanban,
@@ -7,26 +8,23 @@ import {
   Wallet,
   HardHat,
   Library,
+  PenTool,
   Ruler,
   Box,
   MonitorPlay,
   Truck,
-  Files,
-  MessagesSquare,
   ListChecks,
-  Bell,
-  CreditCard,
-  UserCog,
-  LifeBuoy,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 
 export type NavItem = { label: string; to: string; icon: LucideIcon };
-export type NavGroup = { group: string; items: NavItem[] };
+export type NavGroup = { group: string; icon: LucideIcon; items: NavItem[] };
 
 export const navGroups: NavGroup[] = [
   {
-    group: "Main",
+    group: "Overview",
+    icon: Home,
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
       { label: "Calendar", to: "/calendar", icon: CalendarDays },
@@ -39,6 +37,7 @@ export const navGroups: NavGroup[] = [
   },
   {
     group: "Design",
+    icon: PenTool,
     items: [
       { label: "Asset Library", to: "/assets", icon: Library },
       { label: "2D Planner", to: "/planner", icon: Ruler },
@@ -47,21 +46,11 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    group: "Operations",
+    group: "Production",
+    icon: Wrench,
     items: [
       { label: "Procurement", to: "/procurement", icon: Truck },
-      { label: "Files", to: "/files", icon: Files },
-      { label: "Communication", to: "/messages", icon: MessagesSquare },
       { label: "Tasks", to: "/tasks", icon: ListChecks },
-      { label: "Notifications", to: "/notifications", icon: Bell },
-    ],
-  },
-  {
-    group: "Studio",
-    items: [
-      { label: "Studio Plan", to: "/studio-plan", icon: CreditCard },
-      { label: "Profile", to: "/profile", icon: UserCog },
-      { label: "Help Center", to: "/help", icon: LifeBuoy },
     ],
   },
 ];
