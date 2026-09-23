@@ -2,9 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
-  Search,
   Bell,
-  Plus,
   Sun,
   Moon,
   Sparkles,
@@ -25,7 +23,6 @@ import { useAuth } from "@/context/auth-context";
 import { studio } from "@/data/mock";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -396,8 +393,8 @@ export function AppShell({ children }: { children: ReactNode }) {
             collapsed ? "lg:pl-16" : "lg:pl-72",
           )}
         >
-          <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur">
-            <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-5">
+          <header className="sticky top-0 z-20 bg-background/85 backdrop-blur">
+            <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-5">
               <div className="flex items-center gap-2">
                 <div className="md:hidden">
                   <Sheet open={open} onOpenChange={setOpen}>
@@ -426,23 +423,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   )}
                 </Button>
               </div>
-              <div className="hidden md:block" />
-              <div className="min-w-0">
-                <label className="relative flex items-center">
-                  <Search className="pointer-events-none absolute left-3 size-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search leads, projects, clients…"
-                    className="h-10 w-full pl-9 md:max-w-md"
-                    aria-label="Search"
-                  />
-                </label>
-              </div>
-              <div className="flex shrink-0 items-center gap-1">
-                <Button asChild size="sm" className="hidden sm:inline-flex">
-                  <Link to="/leads">
-                    <Plus className="size-4" /> New lead
-                  </Link>
-                </Button>
+              <div className="flex items-center justify-end gap-1">
                 <Button asChild variant="ghost" size="icon" aria-label="Notifications">
                   <Link to="/notifications">
                     <Bell className="size-4.5" />
