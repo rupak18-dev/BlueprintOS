@@ -44,7 +44,7 @@ export default function HomePage() {
   return (
     <>
       <Seo
-        title="Atelier Verde — interior design studio workspace"
+        title="Canvas — interior design studio workspace"
         description="One workspace for interior designers: capture leads, quote, design in 2D and 3D/VR, present to clients, and manage procurement and accounts."
       />
 
@@ -62,9 +62,9 @@ export default function HomePage() {
                 Run the whole design business, not just the drawings.
               </h1>
               <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
-                Atelier Verde takes an interior project from first enquiry to final handover —
-                quotations, floor plans, VR walkthroughs, client approvals, procurement and accounts
-                in a single studio workspace.
+                Canvas takes an interior project from first enquiry to final handover — quotations,
+                floor plans, VR walkthroughs, client approvals, procurement and accounts in a single
+                studio workspace.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Button asChild size="lg">

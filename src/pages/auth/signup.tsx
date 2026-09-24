@@ -28,7 +28,7 @@ export default function SignupPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-accent/50 to-background px-4 py-12">
       <Seo
-        title="Create your studio — Atelier Verde"
+        title="Create your studio — Canvas"
         description="Set up an interior design studio workspace with a 14-day trial."
       />
       <Card className="w-full max-w-lg">
@@ -44,7 +44,7 @@ export default function SignupPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="studio">Studio name</Label>
-              <Input id="studio" className="h-11" placeholder="Atelier Verde" />
+              <Input id="studio" className="h-11" placeholder="Canvas" />
             </div>
             <div className="space-y-2 sm:col-span-2">
               <Label htmlFor="email2">Work email</Label>

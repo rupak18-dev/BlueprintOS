@@ -27,7 +27,7 @@ export default function PricingPage() {
   return (
     <>
       <Seo
-        title="Pricing — Atelier Verde studio plans"
+        title="Pricing — Canvas studio plans"
         description="Solo, Studio Pro and Enterprise plans for interior design studios, with 2D planning and 3D/VR included."
       />
 

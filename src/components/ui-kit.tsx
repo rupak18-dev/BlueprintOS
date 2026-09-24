@@ -64,8 +64,10 @@ export function StatCard({
   );
 }
 
-export function StatGrid({ children }: { children: ReactNode }) {
-  return <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">{children}</div>;
+export function StatGrid({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <div className={cn("mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4", className)}>{children}</div>
+  );
 }
 
 export function Section({
@@ -97,7 +99,7 @@ export function Section({
 
 export type Column<T> = {
   key: string;
-  header: string;
+  header: ReactNode;
   cell: (row: T) => ReactNode;
   /** Hide this column below the given breakpoint on the desktop table. */
   hide?: "md" | "lg" | "xl";
@@ -105,13 +107,10 @@ export type Column<T> = {
   align?: "right";
 };
 
-/**
- * Desktop/tablet: real table. Phone: stacked cards built from the same columns.
- */
+/** Real table on all screen sizes with horizontal scroll. */
 export function ResponsiveTable<T extends { id: string }>({
   columns,
   rows,
-  renderCardAction,
   empty = "Nothing here yet.",
 }: {
   columns: Column<T>[];
@@ -119,6 +118,8 @@ export function ResponsiveTable<T extends { id: string }>({
   renderCardAction?: (row: T) => ReactNode;
   empty?: string;
 }) {
+  const cellPad = "px-4 py-3";
+  const headPad = "px-4 py-3";
   const hideClass = (hide?: Column<T>["hide"]) =>
     hide === "md"
       ? "hidden md:table-cell"
@@ -132,20 +133,21 @@ export function ResponsiveTable<T extends { id: string }>({
     return <p className="py-8 text-center text-sm text-muted-foreground">{empty}</p>;
   }
 
-  const primary = columns.find((c) => c.primary) ?? columns[0];
-  if (!primary) return null;
-  const rest = columns.filter((c) => c !== primary);
-
   return (
-    <>
-      <div className="-mx-2 hidden overflow-x-auto sm:block">
+    <div className="overflow-x-auto">
+      <div className="min-w-[880px]">
         <Table>
           <TableHeader>
             <TableRow>
               {columns.map((c) => (
                 <TableHead
                   key={c.key}
-                  className={cn(hideClass(c.hide), c.align === "right" && "text-right")}
+                  className={cn(
+                    hideClass(c.hide),
+                    headPad,
+                    "whitespace-nowrap",
+                    c.align === "right" && "text-right",
+                  )}
                 >
                   {c.header}
                 </TableHead>
@@ -160,6 +162,7 @@ export function ResponsiveTable<T extends { id: string }>({
                     key={c.key}
                     className={cn(
                       hideClass(c.hide),
+                      cellPad,
                       c.align === "right" && "text-right",
                       c.primary && "font-medium",
                     )}
@@ -172,28 +175,7 @@ export function ResponsiveTable<T extends { id: string }>({
           </TableBody>
         </Table>
       </div>
-
-      <ul className="space-y-3 sm:hidden">
-        {rows.map((row) => (
-          <li key={row.id} className="rounded-xl border border-border bg-card p-3">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
-              <div className="min-w-0 text-sm font-semibold">{primary.cell(row)}</div>
-              {renderCardAction && <div className="shrink-0">{renderCardAction(row)}</div>}
-            </div>
-            <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2">
-              {rest.map((c) => (
-                <div key={c.key} className="min-w-0">
-                  <dt className="truncate text-[11px] uppercase tracking-wide text-muted-foreground">
-                    {c.header}
-                  </dt>
-                  <dd className="mt-0.5 truncate text-sm">{c.cell(row)}</dd>
-                </div>
-              ))}
-            </dl>
-          </li>
-        ))}
-      </ul>
-    </>
+    </div>
   );
 }
 
@@ -209,16 +191,30 @@ const toneMap: Record<string, string> = {
   "In transit": "bg-brass/20 text-brass-foreground border-brass/40",
   "In review": "bg-brass/20 text-brass-foreground border-brass/40",
   "In production": "bg-brass/20 text-brass-foreground border-brass/40",
+  New: "bg-brass/15 text-brass-foreground border-brass/40",
+  Qualified: "bg-warning/15 text-warning border-warning/30",
+  "Site visit": "bg-warning/15 text-warning border-warning/30",
+  Quotation: "bg-brass/20 text-brass-foreground border-brass/40",
+  Negotiation: "bg-warning/15 text-warning border-warning/30",
 };
 
-export function StatusPill({ value }: { value: string }) {
+export function StatusPill({ value, color }: { value: string; color?: string | undefined }) {
   return (
     <Badge
       variant="outline"
       className={cn(
         "whitespace-nowrap font-medium",
-        toneMap[value] ?? "bg-muted text-muted-foreground",
+        !color && (toneMap[value] || "bg-muted text-muted-foreground"),
       )}
+      style={
+        color
+          ? {
+              backgroundColor: `color-mix(in oklab, ${color} 14%, transparent)`,
+              borderColor: `color-mix(in oklab, ${color} 38%, transparent)`,
+              color: `color-mix(in oklab, ${color} 65%, var(--foreground))`,
+            }
+          : undefined
+      }
     >
       {value}
     </Badge>

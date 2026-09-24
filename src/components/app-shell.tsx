@@ -393,7 +393,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             collapsed ? "lg:pl-16" : "lg:pl-72",
           )}
         >
-          <header className="sticky top-0 z-20 bg-background/85 backdrop-blur">
+          <header className="sticky top-0 z-20 border-b border-border bg-background">
             <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-5">
               <div className="flex items-center gap-2">
                 <div className="md:hidden">
@@ -435,12 +435,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           </header>
 
           <main className="px-4 pb-24 pt-5 sm:px-6 sm:pb-10 lg:px-8">
-            <div className="mx-auto w-full max-w-[1400px]">{children}</div>
+            <div className="w-full">{children}</div>
           </main>
         </div>
 
         {/* Mobile bottom bar */}
-        <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+        <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] md:hidden">
           <ul className="grid grid-cols-5">
             {mobileBarItems.map((item) => (
               <li key={item.to}>

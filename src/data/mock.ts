@@ -1,7 +1,7 @@
 export type Status = "new" | "active" | "won" | "lost" | "hold" | "done";
 
 export const studio = {
-  name: "Atelier Verde",
+  name: "Canvas",
   tagline: "Interior design studio · Bengaluru",
   plan: "Studio Pro",
   seats: 12,
@@ -24,6 +24,8 @@ export const pipeline = [
   { stage: "Won", count: 4, value: "₹2.05 Cr" },
 ];
 
+export { leads, type Lead } from "./leads";
+
 export const revenueSeries = [
   { month: "Apr", quoted: 62, collected: 41 },
   { month: "May", quoted: 74, collected: 52 },
@@ -33,134 +35,85 @@ export const revenueSeries = [
   { month: "Sep", quoted: 104, collected: 78 },
 ];
 
-export type Lead = {
-  id: string;
-  name: string;
-  contact: string;
-  phone: string;
-  city: string;
-  scope: string;
-  budget: string;
-  stage: string;
-  source: string;
-  owner: string;
-  updated: string;
-  requirements: string[];
-  rooms: { room: string; area: string; note: string }[];
-  estimate: { item: string; qty: string; rate: string; amount: string }[];
-};
-
-export const leads: Lead[] = [
-  {
-    id: "LD-2041",
-    name: "Whitefield 3BHK turnkey",
-    contact: "Ananya Rao",
-    phone: "+91 98450 11234",
-    city: "Bengaluru",
-    scope: "Full home turnkey",
-    budget: "₹28 L",
-    stage: "Quotation",
-    source: "Website",
-    owner: "Meera Nair",
-    updated: "2 hours ago",
-    requirements: [
-      "Modular kitchen with tall unit and breakfast counter",
-      "Two wardrobes with loft storage",
-      "Neutral palette, warm wood tones",
-      "Possession in 14 weeks",
-    ],
-    rooms: [
-      { room: "Living", area: "320 sq ft", note: "TV panel + false ceiling" },
-      { room: "Kitchen", area: "110 sq ft", note: "L-shape, quartz counter" },
-      { room: "Master bed", area: "180 sq ft", note: "Wardrobe + study nook" },
-      { room: "Kids bed", area: "140 sq ft", note: "Bunk with storage" },
-    ],
-    estimate: [
-      { item: "Modular kitchen", qty: "110 sq ft", rate: "₹2,150", amount: "₹2,36,500" },
-      { item: "Wardrobes", qty: "180 sq ft", rate: "₹1,850", amount: "₹3,33,000" },
-      { item: "False ceiling + lighting", qty: "640 sq ft", rate: "₹210", amount: "₹1,34,400" },
-      { item: "Painting", qty: "1,850 sq ft", rate: "₹38", amount: "₹70,300" },
-    ],
-  },
-  {
-    id: "LD-2038",
-    name: "Indiranagar cafe fitout",
-    contact: "Rohit Menon",
-    phone: "+91 99000 88213",
-    city: "Bengaluru",
-    scope: "Commercial fitout",
-    budget: "₹42 L",
-    stage: "Site visit",
-    source: "Referral",
-    owner: "Devansh Shah",
-    updated: "Yesterday",
-    requirements: [
-      "Seating for 46 covers",
-      "Open bar counter",
-      "Acoustic ceiling",
-      "Brand palette in terracotta",
-    ],
-    rooms: [
-      { room: "Dining hall", area: "820 sq ft", note: "Banquette seating" },
-      { room: "Bar", area: "160 sq ft", note: "Backlit bottle display" },
-    ],
-    estimate: [
-      { item: "Joinery & millwork", qty: "Lot", rate: "—", amount: "₹14,20,000" },
-      { item: "Electrical & lighting", qty: "Lot", rate: "—", amount: "₹6,40,000" },
-    ],
-  },
-  {
-    id: "LD-2033",
-    name: "Koramangala villa refresh",
-    contact: "Saira Kapoor",
-    phone: "+91 98860 44121",
-    city: "Bengaluru",
-    scope: "Renovation",
-    budget: "₹65 L",
-    stage: "Negotiation",
-    source: "Instagram",
-    owner: "Meera Nair",
-    updated: "2 days ago",
-    requirements: ["Retain existing flooring", "Add home theatre", "Landscape balcony"],
-    rooms: [
-      { room: "Living", area: "460 sq ft", note: "Double height wall art" },
-      { room: "Theatre", area: "220 sq ft", note: "Acoustic panels" },
-    ],
-    estimate: [{ item: "Civil + finishes", qty: "Lot", rate: "—", amount: "₹22,00,000" }],
-  },
-  {
-    id: "LD-2029",
-    name: "HSR studio apartment",
-    contact: "Tarun Iyer",
-    phone: "+91 90080 71190",
-    city: "Bengaluru",
-    scope: "Compact home",
-    budget: "₹9 L",
-    stage: "New",
-    source: "Walk-in",
-    owner: "Priya Das",
-    updated: "3 days ago",
-    requirements: ["Space saving furniture", "Murphy bed", "Under ₹10 L"],
-    rooms: [{ room: "Studio", area: "410 sq ft", note: "Multi-use zoning" }],
-    estimate: [{ item: "Compact package", qty: "Lot", rate: "—", amount: "₹8,60,000" }],
-  },
-  {
-    id: "LD-2024",
-    name: "Hebbal duplex",
-    contact: "Nikhil Sharma",
-    phone: "+91 97400 22118",
-    city: "Bengaluru",
-    scope: "Full home turnkey",
-    budget: "₹52 L",
-    stage: "Qualified",
-    source: "Website",
-    owner: "Devansh Shah",
-    updated: "4 days ago",
-    requirements: ["Staircase feature wall", "Two kitchens", "Vaastu compliant layout"],
-    rooms: [{ room: "Whole home", area: "2,410 sq ft", note: "Duplex, 4 bed" }],
-    estimate: [{ item: "Turnkey package", qty: "Lot", rate: "—", amount: "₹49,80,000" }],
-  },
+export const LEAD_STATUSES = [
+  "New",
+  "Qualified",
+  "Site visit",
+  "Quotation",
+  "Negotiation",
+  "Won",
+  "Lost",
 ];
+
+export const LEAD_SOURCES = ["Website", "Referral", "Instagram", "Walk-in", "Houzz", "Architect"];
+
+export const LEAD_OWNERS = ["Meera Nair", "Devansh Shah", "Priya Das"];
+
+export const PROPERTY_TYPES = [
+  "Apartment",
+  "Villa",
+  "Independent house",
+  "Studio apartment",
+  "Penthouse",
+  "Office",
+  "Retail store",
+  "Café / Restaurant",
+  "Co-working",
+];
+
+export const WORK_TYPES = [
+  "Full home turnkey",
+  "Modular kitchen",
+  "Wardrobes",
+  "Renovation",
+  "Commercial fitout",
+  "Office fitout",
+  "Furniture only",
+  "Compact home",
+];
+
+export const ROOM_OPTIONS = [
+  "Living room",
+  "Kitchen",
+  "Bedrooms",
+  "Bathrooms",
+  "Dining",
+  "Study",
+  "Kids room",
+  "Balcony",
+  "Pooja room",
+  "Home theatre",
+];
+
+export const STYLE_OPTIONS = [
+  "Modern minimal",
+  "Contemporary",
+  "Traditional",
+  "Industrial",
+  "Bohemian",
+  "Japandi",
+  "Art deco",
+];
+
+export const BUDGET_RANGES = [
+  { label: "Under ₹10 L", min: 0, max: 1_000_000 },
+  { label: "₹10 L – ₹25 L", min: 1_000_000, max: 2_500_000 },
+  { label: "₹25 L – ₹50 L", min: 2_500_000, max: 5_000_000 },
+  { label: "₹50 L – ₹1 Cr", min: 5_000_000, max: 10_000_000 },
+  { label: "Above ₹1 Cr", min: 10_000_000, max: Number.MAX_SAFE_INTEGER },
+];
+
+export function formatBudget(value: number): string {
+  if (value >= 10_000_000) {
+    const cr = value / 10_000_000;
+    return `₹${Number.isInteger(cr) ? cr : cr.toFixed(2)} Cr`;
+  }
+  if (value >= 100_000) {
+    const l = value / 100_000;
+    return `₹${Number.isInteger(l) ? l : l.toFixed(1)} L`;
+  }
+  return `₹${value.toLocaleString("en-IN")}`;
+}
 
 export type Project = {
   id: string;

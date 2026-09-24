@@ -148,10 +148,14 @@
     border-color: var(--color-border);
   }
 
+  html {
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: var(--font-sans);
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 

@@ -6,8 +6,8 @@ export default function GalleryPage() {
   return (
     <>
       <Seo
-        title="Gallery — interior projects by Atelier Verde"
-        description="Sample residential and commercial interiors designed and delivered through the Atelier Verde workspace."
+        title="Gallery — interior projects by Canvas"
+        description="Sample residential and commercial interiors designed and delivered through the Canvas workspace."
       />
 
       <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-16">

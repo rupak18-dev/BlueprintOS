@@ -5,6 +5,7 @@ import { HelmetProvider } from "react-helmet-async";
 
 import App from "./App";
 import { AuthProvider } from "./context/auth-context";
+import { Toaster } from "./components/ui/sonner";
 import "./styles.css";
 
 createRoot(document.getElementById("root")!).render(
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <AuthProvider>
           <App />
+          <Toaster richColors position="top-right" />
         </AuthProvider>
       </BrowserRouter>
     </HelmetProvider>

@@ -29,7 +29,7 @@ export default function LoginPage() {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <Seo
-        title="Log in — Atelier Verde studio"
+        title="Log in — Canvas studio"
         description="Sign in to your interior design studio workspace."
       />
 
@@ -90,7 +90,7 @@ export default function LoginPage() {
               </Button>
             </form>
             <p className="mt-6 text-sm text-muted-foreground">
-              New to Atelier Verde?{" "}
+              New to Canvas?{" "}
               <Link to="/signup" className="font-medium text-foreground underline">
                 Create a studio
               </Link>
