@@ -40,39 +40,6 @@ function presetMonth(): DateRange {
   return { from: toISODate(new Date(now.getFullYear(), now.getMonth(), 1)), to: todayISO() };
 }
 
-function isSameRange(value: DateRange, preset: DateRange): boolean {
-  return value.from === preset.from && value.to === preset.to;
-}
-
-function PresetRow({
-  label,
-  active,
-  onClick,
-  variant,
-}: {
-  label: string;
-  active?: boolean;
-  onClick: () => void;
-  variant?: "destructive";
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors",
-        variant === "destructive"
-          ? "text-destructive hover:bg-destructive/10"
-          : "hover:bg-accent hover:text-accent-foreground",
-        active && variant !== "destructive" && "font-medium text-foreground",
-      )}
-    >
-      <Check className={cn("size-4 shrink-0", active ? "opacity-100" : "opacity-0")} />
-      <span className="min-w-0 truncate">{label}</span>
-    </button>
-  );
-}
-
 export function DateRangePopover({
   value,
   onChange,
@@ -120,24 +87,6 @@ export function DateRangePopover({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto max-w-[calc(100vw-2rem)] p-3" align="end">
-        <div className="mb-2 grid gap-0.5 border-b border-border pb-2">
-          <PresetRow
-            label="Today"
-            active={isSameRange(value, today)}
-            onClick={() => onChange(today)}
-          />
-          <PresetRow
-            label="Last 7 days"
-            active={isSameRange(value, last7)}
-            onClick={() => onChange(last7)}
-          />
-          <PresetRow
-            label="This month"
-            active={isSameRange(value, month)}
-            onClick={() => onChange(month)}
-          />
-          <PresetRow label="Clear" variant="destructive" onClick={() => onChange({})} />
-        </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <div className="min-w-0">
             <p className="px-1 pb-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
