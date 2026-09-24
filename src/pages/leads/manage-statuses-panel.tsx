@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Check, Pencil, Plus, RotateCcw, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sheet";
 import { StatusPill } from "@/components/ui-kit";
 import { cn } from "@/lib/utils";
-import { LEAD_STATUSES } from "@/data/mock";
+import { LEAD_STATUSES, LEAD_STATUS_COLORS } from "@/data/mock";
 import { DEFAULT_STATUS_COLOR, loadSavedColors, saveSavedColors } from "@/lib/lead-storage";
 
 const SUGGESTED_COLORS = [
@@ -27,6 +27,7 @@ const SUGGESTED_COLORS = [
   { label: "Orange", hex: "#EA580C" },
   { label: "Teal", hex: "#0D9488" },
   { label: "Slate", hex: "#64748B" },
+  { label: "Stone", hex: "#78716C" },
 ];
 
 function normalizeHex(value: string): string | null {
@@ -43,6 +44,9 @@ export function ManageStatusesPanel({
   onCreate,
   onRename,
   onDelete,
+  defaultOverrides,
+  onRecolorDefault,
+  onResetDefaultColor,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -52,6 +56,9 @@ export function ManageStatusesPanel({
   onCreate: (name: string, color: string) => void;
   onRename: (oldName: string, newName: string) => void;
   onDelete: (name: string) => void;
+  defaultOverrides: Record<string, string>;
+  onRecolorDefault: (name: string, hex: string) => void;
+  onResetDefaultColor: (name: string) => void;
 }) {
   const [name, setName] = useState("");
   const [color, setColor] = useState(DEFAULT_STATUS_COLOR);
@@ -129,8 +136,8 @@ export function ManageStatusesPanel({
         <SheetHeader>
           <SheetTitle>Manage statuses</SheetTitle>
           <SheetDescription>
-            All pipeline stages in one place. Add new ones, rename or remove custom ones. Defaults
-            can't be edited.
+            All pipeline stages in one place. Add new ones, rename or remove custom ones. Default
+            colors can be changed, but names are fixed.
           </SheetDescription>
         </SheetHeader>
 
@@ -177,6 +184,32 @@ export function ManageStatusesPanel({
                     {isDefault && (
                       <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                         Default
+                      </span>
+                    )}
+                    {isDefault && (
+                      <span className="ml-auto flex shrink-0 items-center gap-1">
+                        <input
+                          type="color"
+                          value={
+                            colors[status] ?? LEAD_STATUS_COLORS[status] ?? DEFAULT_STATUS_COLOR
+                          }
+                          onChange={(e) => onRecolorDefault(status, e.target.value)}
+                          aria-label={`Change color for ${status}`}
+                          className="h-7 w-8 shrink-0 cursor-pointer rounded-md border border-border bg-transparent p-1"
+                        />
+                        {defaultOverrides[status] && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="size-7"
+                            aria-label={`Reset ${status} color`}
+                            title="Reset to default color"
+                            onClick={() => onResetDefaultColor(status)}
+                          >
+                            <RotateCcw className="size-3.5" />
+                          </Button>
+                        )}
                       </span>
                     )}
                     {!isDefault && (

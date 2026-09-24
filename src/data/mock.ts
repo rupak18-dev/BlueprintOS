@@ -16,11 +16,11 @@ export const kpis = [
 ];
 
 export const pipeline = [
-  { stage: "New", count: 7, value: "₹64 L" },
-  { stage: "Qualified", count: 5, value: "₹1.1 Cr" },
-  { stage: "Site visit", count: 3, value: "₹72 L" },
-  { stage: "Quotation", count: 6, value: "₹1.42 Cr" },
-  { stage: "Negotiation", count: 2, value: "₹48 L" },
+  { stage: "Created", count: 7, value: "₹64 L" },
+  { stage: "Requirement gathered", count: 5, value: "₹1.1 Cr" },
+  { stage: "Visit planned", count: 3, value: "₹72 L" },
+  { stage: "Pending on client decision", count: 6, value: "₹1.42 Cr" },
+  { stage: "On hold", count: 2, value: "₹48 L" },
   { stage: "Won", count: 4, value: "₹2.05 Cr" },
 ];
 
@@ -36,18 +36,32 @@ export const revenueSeries = [
 ];
 
 export const LEAD_STATUSES = [
-  "New",
-  "Qualified",
-  "Site visit",
-  "Quotation",
-  "Negotiation",
+  "Created",
+  "Visit planned",
+  "Requirement gathered",
+  "Pending on client decision",
+  "On hold",
+  "Junk",
   "Won",
-  "Lost",
 ];
+
+export const LEAD_STATUS_COLORS: Record<string, string> = {
+  Created: "#0284C7",
+  "Visit planned": "#7C3AED",
+  "Requirement gathered": "#0D9488",
+  "Pending on client decision": "#EA580C",
+  "On hold": "#64748B",
+  Junk: "#78716C",
+  Won: "#16A34A",
+};
 
 export const LEAD_SOURCES = ["Website", "Referral", "Instagram", "Walk-in", "Houzz", "Architect"];
 
 export const LEAD_OWNERS = ["Meera Nair", "Devansh Shah", "Priya Das"];
+
+export const ROLE_OPTIONS = ["Owner", "Tenant", "Architect", "Family member", "Other"];
+
+export const FINANCIAL_YEARS = ["FY 2026-27", "FY 2025-26", "FY 2027-28"];
 
 export const PROPERTY_TYPES = [
   "Apartment",

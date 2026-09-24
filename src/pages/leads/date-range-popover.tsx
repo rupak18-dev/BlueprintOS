@@ -1,9 +1,10 @@
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { formatDateDMY } from "@/lib/export-csv";
+import { cn } from "@/lib/utils";
 
 export type DateRange = { from?: string | undefined; to?: string | undefined };
 
@@ -21,6 +22,55 @@ function parseISODate(iso?: string): Date | undefined {
 
 function todayISO(): string {
   return toISODate(new Date());
+}
+
+function presetToday(): DateRange {
+  return { from: todayISO(), to: todayISO() };
+}
+
+function presetLast7(): DateRange {
+  const end = new Date();
+  const start = new Date();
+  start.setDate(end.getDate() - 6);
+  return { from: toISODate(start), to: toISODate(end) };
+}
+
+function presetMonth(): DateRange {
+  const now = new Date();
+  return { from: toISODate(new Date(now.getFullYear(), now.getMonth(), 1)), to: todayISO() };
+}
+
+function isSameRange(value: DateRange, preset: DateRange): boolean {
+  return value.from === preset.from && value.to === preset.to;
+}
+
+function PresetRow({
+  label,
+  active,
+  onClick,
+  variant,
+}: {
+  label: string;
+  active?: boolean;
+  onClick: () => void;
+  variant?: "destructive";
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors",
+        variant === "destructive"
+          ? "text-destructive hover:bg-destructive/10"
+          : "hover:bg-accent hover:text-accent-foreground",
+        active && variant !== "destructive" && "font-medium text-foreground",
+      )}
+    >
+      <Check className={cn("size-4 shrink-0", active ? "opacity-100" : "opacity-0")} />
+      <span className="min-w-0 truncate">{label}</span>
+    </button>
+  );
 }
 
 export function DateRangePopover({
@@ -52,17 +102,9 @@ export function DateRangePopover({
     onChange({ from: next && from && next < from ? next : from, to: next });
   };
 
-  const presetLast7 = () => {
-    const end = new Date();
-    const start = new Date();
-    start.setDate(end.getDate() - 6);
-    onChange({ from: toISODate(start), to: toISODate(end) });
-  };
-
-  const presetMonth = () => {
-    const now = new Date();
-    onChange({ from: toISODate(new Date(now.getFullYear(), now.getMonth(), 1)), to: todayISO() });
-  };
+  const today = presetToday();
+  const last7 = presetLast7();
+  const month = presetMonth();
 
   return (
     <Popover>
@@ -78,29 +120,23 @@ export function DateRangePopover({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto max-w-[calc(100vw-2rem)] p-3" align="end">
-        <div className="mb-2 flex flex-wrap items-center gap-1.5">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 px-2 text-xs"
-            onClick={() => onChange({ from: todayISO(), to: todayISO() })}
-          >
-            Today
-          </Button>
-          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={presetLast7}>
-            Last 7 days
-          </Button>
-          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={presetMonth}>
-            This month
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 px-2 text-xs text-destructive hover:text-destructive"
-            onClick={() => onChange({})}
-          >
-            Clear
-          </Button>
+        <div className="mb-2 grid gap-0.5 border-b border-border pb-2">
+          <PresetRow
+            label="Today"
+            active={isSameRange(value, today)}
+            onClick={() => onChange(today)}
+          />
+          <PresetRow
+            label="Last 7 days"
+            active={isSameRange(value, last7)}
+            onClick={() => onChange(last7)}
+          />
+          <PresetRow
+            label="This month"
+            active={isSameRange(value, month)}
+            onClick={() => onChange(month)}
+          />
+          <PresetRow label="Clear" variant="destructive" onClick={() => onChange({})} />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <div className="min-w-0">

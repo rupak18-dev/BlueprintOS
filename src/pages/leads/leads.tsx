@@ -69,6 +69,7 @@ import {
   LEAD_OWNERS,
   LEAD_SOURCES,
   LEAD_STATUSES,
+  LEAD_STATUS_COLORS,
   formatBudget,
   leads as seedLeads,
   type Lead,
@@ -77,9 +78,15 @@ import { CreateLeadPanel } from "./create-lead-panel";
 import { ManageStatusesPanel } from "./manage-statuses-panel";
 import { DateRangePopover, type DateRange } from "./date-range-popover";
 import { exportLeadsCsv } from "@/lib/export-csv";
-import { loadExtraLeads } from "@/lib/lead-form-storage";
+import { loadExtraLeads, saveExtraLead } from "@/lib/lead-form-storage";
 import { cn } from "@/lib/utils";
-import { DEFAULT_STATUS_COLOR, loadCustomStatuses, saveCustomStatuses } from "@/lib/lead-storage";
+import {
+  DEFAULT_STATUS_COLOR,
+  loadCustomStatuses,
+  saveCustomStatuses,
+  loadDefaultColorOverrides,
+  saveDefaultColorOverrides,
+} from "@/lib/lead-storage";
 
 const ALL = "__all";
 const PAGE_SIZE_OPTIONS = [10, 15, 20];
@@ -421,6 +428,7 @@ function pageNumbers(current: number, total: number): (number | "…")[] {
 }
 
 const storedCustomStatuses = loadCustomStatuses(LEAD_STATUSES);
+const storedDefaultOverrides = loadDefaultColorOverrides(LEAD_STATUSES);
 
 export default function LeadsPage() {
   const navigate = useNavigate();
@@ -429,9 +437,13 @@ export default function LeadsPage() {
     ...LEAD_STATUSES,
     ...storedCustomStatuses.map((s) => s.name),
   ]);
-  const [statusColors, setStatusColors] = useState<Record<string, string>>(() =>
-    Object.fromEntries(storedCustomStatuses.map((s) => [s.name, s.color])),
-  );
+  const [statusColors, setStatusColors] = useState<Record<string, string>>(() => ({
+    ...LEAD_STATUS_COLORS,
+    ...storedDefaultOverrides,
+    ...Object.fromEntries(storedCustomStatuses.map((s) => [s.name, s.color])),
+  }));
+  const [defaultOverrides, setDefaultOverrides] =
+    useState<Record<string, string>>(storedDefaultOverrides);
   const [query, setQuery] = useState("");
   const [filterBy, setFilterBy] = useState<FilterBy>("status");
   const [filterValue, setFilterValue] = useState<string>(ALL);
@@ -490,7 +502,7 @@ export default function LeadsPage() {
   }, [rows, statuses]);
 
   const totalValue = useMemo(() => rows.reduce((sum, l) => sum + l.budgetValue, 0), [rows]);
-  const openCount = rows.filter((l) => l.stage !== "Won" && l.stage !== "Lost").length;
+  const openCount = rows.filter((l) => l.stage !== "Won" && l.stage !== "Junk").length;
   const wonCount = rows.filter((l) => l.stage === "Won").length;
   const conversionRate = rows.length ? Math.round((wonCount / rows.length) * 100) : 0;
 
@@ -560,6 +572,24 @@ export default function LeadsPage() {
     setStatuses((prev) => [...prev, name]);
     setStatusColors((prev) => ({ ...prev, [name]: color }));
     toast.success(`Status "${name}" created`);
+  };
+
+  const recolorDefaultStatus = (name: string, hex: string) => {
+    if (!LEAD_STATUSES.includes(name)) return;
+    const nextHex = hex.toUpperCase();
+    const next = { ...defaultOverrides, [name]: nextHex };
+    setDefaultOverrides(next);
+    saveDefaultColorOverrides(next);
+    setStatusColors((prev) => ({ ...prev, [name]: nextHex }));
+  };
+
+  const resetDefaultStatusColor = (name: string) => {
+    if (!LEAD_STATUSES.includes(name)) return;
+    const next = { ...defaultOverrides };
+    delete next[name];
+    setDefaultOverrides(next);
+    saveDefaultColorOverrides(next);
+    setStatusColors((prev) => ({ ...prev, [name]: LEAD_STATUS_COLORS[name] ?? prev[name] }));
   };
 
   const renameStatus = (oldName: string, newName: string) => {
@@ -680,6 +710,7 @@ export default function LeadsPage() {
     "LD-" + (Math.max(0, ...rows.map((r) => parseInt(r.id.replace("LD-", ""), 10) || 0)) + 1);
 
   const handleCreate = (lead: Lead) => {
+    saveExtraLead(lead);
     setRows((prev) => [lead, ...prev]);
     toast.success(`Lead created`, { description: `${lead.name} added to the pipeline.` });
   };
@@ -941,6 +972,9 @@ export default function LeadsPage() {
         onCreate={createStatus}
         onRename={renameStatus}
         onDelete={deleteStatus}
+        defaultOverrides={defaultOverrides}
+        onRecolorDefault={recolorDefaultStatus}
+        onResetDefaultColor={resetDefaultStatusColor}
       />
       <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
         <AlertDialogContent>

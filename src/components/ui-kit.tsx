@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { LEAD_STATUS_COLORS } from "@/data/mock";
 
 export function PageHeader({
   title,
@@ -202,6 +203,7 @@ const toneMap: Record<string, string> = {
 };
 
 export function statusToneClass(value: string): string {
+  if (LEAD_STATUS_COLORS[value]) return "";
   return toneMap[value] || "bg-muted text-muted-foreground border-border";
 }
 
@@ -214,11 +216,12 @@ export function statusSoftStyle(color: string): CSSProperties {
 }
 
 export function StatusPill({ value, color }: { value: string; color?: string | undefined }) {
+  const hex = color ?? LEAD_STATUS_COLORS[value];
   return (
     <Badge
       variant="outline"
-      className={cn("whitespace-nowrap font-medium", !color && statusToneClass(value))}
-      style={color ? statusSoftStyle(color) : undefined}
+      className={cn("whitespace-nowrap font-medium", !hex && statusToneClass(value))}
+      style={hex ? statusSoftStyle(hex) : undefined}
     >
       {value}
     </Badge>

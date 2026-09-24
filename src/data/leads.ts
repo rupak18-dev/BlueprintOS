@@ -17,6 +17,16 @@ export type Lead = {
   requirements: string[];
   rooms: { room: string; area: string; note: string }[];
   estimate: { item: string; qty: string; rate: string; amount: string }[];
+  role?: string;
+  alternatePhones?: string[];
+  salesOwner?: string;
+  tentativeStart?: string;
+  financialYear?: string;
+  latestRemark?: string;
+  metaDetails?: string;
+  rating?: number;
+  tags?: string[];
+  taxIds?: string;
 };
 
 export const leads: Lead[] = [
@@ -30,7 +40,7 @@ export const leads: Lead[] = [
     scope: "Full home turnkey",
     budget: "₹28 L",
     budgetValue: 2_800_000,
-    stage: "Quotation",
+    stage: "Pending on client decision",
     source: "Website",
     owner: "Meera Nair",
     updated: "2 hours ago",
@@ -98,7 +108,7 @@ export const leads: Lead[] = [
     scope: "Renovation",
     budget: "₹1.5 Cr",
     budgetValue: 15_000_000,
-    stage: "Quotation",
+    stage: "Pending on client decision",
     source: "Website",
     owner: "Meera Nair",
     updated: "3 hours ago",
@@ -122,7 +132,7 @@ export const leads: Lead[] = [
     scope: "Commercial fitout",
     budget: "₹42 L",
     budgetValue: 4_200_000,
-    stage: "Site visit",
+    stage: "Visit planned",
     source: "Referral",
     owner: "Devansh Shah",
     updated: "Yesterday",
@@ -154,7 +164,7 @@ export const leads: Lead[] = [
     scope: "Modular kitchen",
     budget: "₹9.5 L",
     budgetValue: 950_000,
-    stage: "Negotiation",
+    stage: "Pending on client decision",
     source: "Instagram",
     owner: "Priya Das",
     updated: "1 day ago",
@@ -177,7 +187,7 @@ export const leads: Lead[] = [
     scope: "Renovation",
     budget: "₹65 L",
     budgetValue: 6_500_000,
-    stage: "Negotiation",
+    stage: "Pending on client decision",
     source: "Instagram",
     owner: "Meera Nair",
     updated: "2 days ago",
@@ -201,7 +211,7 @@ export const leads: Lead[] = [
     scope: "Retail store fitout",
     budget: "₹24 L",
     budgetValue: 2_400_000,
-    stage: "New",
+    stage: "Created",
     source: "Walk-in",
     owner: "Devansh Shah",
     updated: "2 days ago",
@@ -222,7 +232,7 @@ export const leads: Lead[] = [
     scope: "Compact home",
     budget: "₹9 L",
     budgetValue: 900_000,
-    stage: "New",
+    stage: "Created",
     source: "Walk-in",
     owner: "Priya Das",
     updated: "3 days ago",
@@ -243,7 +253,7 @@ export const leads: Lead[] = [
     scope: "Full home turnkey",
     budget: "₹35 L",
     budgetValue: 3_500_000,
-    stage: "Qualified",
+    stage: "Requirement gathered",
     source: "Houzz",
     owner: "Meera Nair",
     updated: "3 days ago",
@@ -267,7 +277,7 @@ export const leads: Lead[] = [
     scope: "Full home turnkey",
     budget: "₹52 L",
     budgetValue: 5_200_000,
-    stage: "Qualified",
+    stage: "Requirement gathered",
     source: "Website",
     owner: "Devansh Shah",
     updated: "4 days ago",
@@ -319,7 +329,7 @@ export const leads: Lead[] = [
     scope: "Compact home",
     budget: "₹14 L",
     budgetValue: 1_400_000,
-    stage: "Lost",
+    stage: "Junk",
     source: "Website",
     owner: "Meera Nair",
     updated: "5 days ago",
@@ -340,7 +350,7 @@ export const leads: Lead[] = [
     scope: "Independent house",
     budget: "₹3.4 Cr",
     budgetValue: 34_000_000,
-    stage: "New",
+    stage: "Created",
     source: "Referral",
     owner: "Devansh Shah",
     updated: "6 days ago",

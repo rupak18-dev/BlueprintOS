@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from "react";
-import { CalendarDays, ChevronDown, Plus } from "lucide-react";
+import { CalendarDays, ChevronDown, Plus, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -28,11 +28,11 @@ import { formatDateDMY } from "@/lib/export-csv";
 import { cn } from "@/lib/utils";
 import {
   BUDGET_RANGES,
+  FINANCIAL_YEARS,
   LEAD_OWNERS,
   LEAD_SOURCES,
   PROPERTY_TYPES,
-  ROOM_OPTIONS,
-  STYLE_OPTIONS,
+  ROLE_OPTIONS,
   WORK_TYPES,
   formatBudget,
   type Lead,
@@ -42,40 +42,54 @@ const ALL = "__all";
 
 type FormState = {
   contact: string;
-  email: string;
   phone: string;
+  email: string;
+  role: string;
+  projectName: string;
+  salesOwner: string;
+  owner: string;
+  stage: string;
+  budgetValue: string;
+  workType: string;
+  tentativeStart: string;
+  financialYear: string;
+  description: string;
+  latestRemark: string;
+  source: string;
   city: string;
   locality: string;
   propertyType: string;
   areaSqft: string;
-  workType: string;
-  budgetValue: string;
-  source: string;
-  stage: string;
-  owner: string;
-  startDate: string;
-  preferredStyle: string;
-  followUp: string;
-  description: string;
+  metaDetails: string;
+  rating: string;
+  tags: string;
+  taxIds: string;
 };
 
 const initial: FormState = {
   contact: "",
-  email: "",
   phone: "",
+  email: "",
+  role: ALL,
+  projectName: "",
+  salesOwner: ALL,
+  owner: ALL,
+  stage: "Created",
+  budgetValue: "",
+  workType: ALL,
+  tentativeStart: "",
+  financialYear: FINANCIAL_YEARS[0] ?? ALL,
+  description: "",
+  latestRemark: "",
+  source: ALL,
   city: "",
   locality: "",
-  propertyType: "",
+  propertyType: ALL,
   areaSqft: "",
-  workType: "",
-  budgetValue: "",
-  source: ALL,
-  stage: "New",
-  owner: ALL,
-  startDate: "",
-  preferredStyle: ALL,
-  followUp: "",
-  description: "",
+  metaDetails: "",
+  rating: ALL,
+  tags: "",
+  taxIds: "",
 };
 
 function Field({
@@ -98,7 +112,7 @@ function Field({
   );
 }
 
-type SectionId = "client" | "property" | "scope" | "budget" | "notes";
+type SectionId = "client" | "project" | "additional";
 
 function FormSection({
   id,
@@ -212,39 +226,43 @@ export function CreateLeadPanel({
   statuses: string[];
 }) {
   const [form, setForm] = useState<FormState>(initial);
-  const [rooms, setRooms] = useState<string[]>([]);
+  const [showMultiple, setShowMultiple] = useState(false);
+  const [altPhones, setAltPhones] = useState<string[]>([]);
   const [openSections, setOpenSections] = useState<Record<SectionId, boolean>>({
     client: true,
-    property: true,
-    scope: true,
-    budget: true,
-    notes: true,
+    project: true,
+    additional: true,
   });
 
   const set = (key: keyof FormState) => (value: string) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
-  const toggleRoom = (room: string, checked: boolean) =>
-    setRooms((prev) => (checked ? [...prev, room] : prev.filter((r) => r !== room)));
-
   const setSection = (id: SectionId) => (value: boolean) =>
     setOpenSections((prev) => ({ ...prev, [id]: value }));
 
   const expandAllSections = () =>
-    setOpenSections({ client: true, property: true, scope: true, budget: true, notes: true });
+    setOpenSections({ client: true, project: true, additional: true });
 
   const reset = () => {
     setForm(initial);
-    setRooms([]);
+    setShowMultiple(false);
+    setAltPhones([]);
     expandAllSections();
   };
+
+  const setAltPhone = (index: number, value: string) =>
+    setAltPhones((prev) => prev.map((p, i) => (i === index ? value : p)));
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const budgetValue = Number(form.budgetValue) || 0;
-    const title = [form.locality || form.city, form.workType || "Interior enquiry"]
-      .filter(Boolean)
-      .join(" ");
+    const title =
+      form.projectName.trim() ||
+      [form.locality || form.city, form.workType === ALL ? "" : form.workType]
+        .filter(Boolean)
+        .join(" ") ||
+      "Interior enquiry";
+    const primaryPhone = form.phone.trim();
 
     onCreate({
       id: nextId,
@@ -253,7 +271,7 @@ export function CreateLeadPanel({
       email: form.email,
       phone: form.phone,
       city: form.city,
-      scope: form.workType || "Interior design",
+      scope: form.workType === ALL ? "Interior design" : form.workType,
       budget: budgetValue > 0 ? formatBudget(budgetValue) : "₹0",
       budgetValue,
       stage: form.stage,
@@ -268,17 +286,21 @@ export function CreateLeadPanel({
             .map((line) => line.trim())
             .filter(Boolean)
         : [],
-      rooms: rooms.map((room) => ({
-        room,
-        area: form.areaSqft ? `${form.areaSqft} sq ft` : "—",
-        note: [
-          form.preferredStyle === ALL ? "" : form.preferredStyle,
-          form.startDate ? `Start ${formatDateDMY(form.startDate)}` : "",
-        ]
-          .filter(Boolean)
-          .join(" · "),
-      })),
+      rooms: [],
       estimate: [],
+      role: form.role === ALL ? "" : form.role,
+      alternatePhones: altPhones.map((p) => p.trim()).filter((p) => p && p !== primaryPhone),
+      salesOwner: form.salesOwner === ALL ? "" : form.salesOwner,
+      tentativeStart: form.tentativeStart,
+      financialYear: form.financialYear,
+      latestRemark: form.latestRemark,
+      metaDetails: form.metaDetails,
+      rating: form.rating === ALL ? undefined : Number(form.rating),
+      tags: form.tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+      taxIds: form.taxIds,
     });
     reset();
     onOpenChange(false);
@@ -296,7 +318,7 @@ export function CreateLeadPanel({
         <SheetHeader>
           <SheetTitle>Create new lead</SheetTitle>
           <SheetDescription>
-            Capture the interior enquiry — client, property, scope and budget.
+            Capture the enquiry — client, project and additional information.
           </SheetDescription>
         </SheetHeader>
 
@@ -317,16 +339,7 @@ export function CreateLeadPanel({
                   onChange={(e) => set("contact")(e.target.value)}
                 />
               </Field>
-              <Field label="Client email">
-                <Input
-                  type="email"
-                  className="h-11"
-                  placeholder="client@email.com"
-                  value={form.email}
-                  onChange={(e) => set("email")(e.target.value)}
-                />
-              </Field>
-              <Field label="Phone number" required>
+              <Field label="Client number" required>
                 <Input
                   required
                   type="tel"
@@ -336,88 +349,23 @@ export function CreateLeadPanel({
                   onChange={(e) => set("phone")(e.target.value)}
                 />
               </Field>
-              <Field label="City">
+              <Field label="Primary email">
                 <Input
+                  type="email"
                   className="h-11"
-                  placeholder="e.g. Bengaluru"
-                  value={form.city}
-                  onChange={(e) => set("city")(e.target.value)}
+                  placeholder="client@email.com"
+                  value={form.email}
+                  onChange={(e) => set("email")(e.target.value)}
                 />
               </Field>
-            </div>
-          </FormSection>
-
-          <FormSection
-            id="lead-section-property"
-            title="Property"
-            open={openSections.property}
-            onOpenChange={setSection("property")}
-          >
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Property type">
-                <Select value={form.propertyType} onValueChange={set("propertyType")}>
+              <Field label="Role">
+                <Select value={form.role} onValueChange={set("role")}>
                   <SelectTrigger className="h-11 w-full">
-                    <SelectValue placeholder="Select property type" />
+                    <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
-                    {PROPERTY_TYPES.map((o) => (
-                      <SelectItem key={o} value={o}>
-                        {o}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Site locality / address">
-                <Input
-                  className="h-11"
-                  placeholder="e.g. Whitefield, Bengaluru"
-                  value={form.locality}
-                  onChange={(e) => set("locality")(e.target.value)}
-                />
-              </Field>
-              <Field label="Estimated area (sq ft)">
-                <Input
-                  type="number"
-                  min={0}
-                  className="h-11"
-                  placeholder="e.g. 1850"
-                  value={form.areaSqft}
-                  onChange={(e) => set("areaSqft")(e.target.value)}
-                />
-              </Field>
-            </div>
-          </FormSection>
-
-          <FormSection
-            id="lead-section-scope"
-            title="Scope of work"
-            open={openSections.scope}
-            onOpenChange={setSection("scope")}
-          >
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Work type">
-                <Select value={form.workType} onValueChange={set("workType")}>
-                  <SelectTrigger className="h-11 w-full">
-                    <SelectValue placeholder="Select work type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {WORK_TYPES.map((o) => (
-                      <SelectItem key={o} value={o}>
-                        {o}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Preferred style">
-                <Select value={form.preferredStyle} onValueChange={set("preferredStyle")}>
-                  <SelectTrigger className="h-11 w-full">
-                    <SelectValue placeholder="Select style" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={ALL}>Select style</SelectItem>
-                    {STYLE_OPTIONS.map((o) => (
+                    <SelectItem value={ALL}>Select role</SelectItem>
+                    {ROLE_OPTIONS.map((o) => (
                       <SelectItem key={o} value={o}>
                         {o}
                       </SelectItem>
@@ -426,80 +374,84 @@ export function CreateLeadPanel({
                 </Select>
               </Field>
             </div>
-            <div className="mt-3 space-y-1.5">
-              <Label className="text-xs">Rooms of interest</Label>
-              <div className="grid grid-cols-2 gap-2">
-                {ROOM_OPTIONS.map((room) => (
-                  <label
-                    key={room}
-                    className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-2.5 py-2 text-xs"
+            <div className="mt-3">
+              <label className="flex cursor-pointer items-center gap-2 text-xs">
+                <Checkbox
+                  checked={showMultiple}
+                  onCheckedChange={(checked) => {
+                    if (checked === true) {
+                      setShowMultiple(true);
+                      setAltPhones((prev) => (prev.length ? prev : [""]));
+                    } else {
+                      setShowMultiple(false);
+                      setAltPhones([]);
+                    }
+                  }}
+                  className="size-4"
+                />
+                <span className="min-w-0">Add multiple numbers for this client</span>
+              </label>
+              {showMultiple && (
+                <div className="mt-2 grid gap-2">
+                  {altPhones.map((value, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Input
+                        type="tel"
+                        className="h-11 min-w-0 flex-1"
+                        placeholder="Alternative number"
+                        value={value}
+                        onChange={(e) => setAltPhone(index, e.target.value)}
+                        aria-label={`Alternative number ${index + 1}`}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="size-11 shrink-0"
+                        aria-label={`Remove number ${index + 1}`}
+                        onClick={() => setAltPhones((prev) => prev.filter((_, i) => i !== index))}
+                      >
+                        <X className="size-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="justify-self-start"
+                    onClick={() => setAltPhones((prev) => [...prev, ""])}
                   >
-                    <Checkbox
-                      checked={rooms.includes(room)}
-                      onCheckedChange={(checked) => toggleRoom(room, checked === true)}
-                      className="mt-0.5 shrink-0"
-                    />
-                    <span className="min-w-0 break-words leading-snug">{room}</span>
-                  </label>
-                ))}
-              </div>
+                    <Plus className="size-4" /> Add number
+                  </Button>
+                </div>
+              )}
             </div>
           </FormSection>
 
           <FormSection
-            id="lead-section-budget"
-            title="Budget & pipeline"
-            open={openSections.budget}
-            onOpenChange={setSection("budget")}
+            id="lead-section-project"
+            title="Project details"
+            open={openSections.project}
+            onOpenChange={setSection("project")}
           >
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Budget (₹)">
+              <Field label="Project name">
                 <Input
-                  type="number"
-                  min={0}
                   className="h-11"
-                  placeholder="e.g. 2800000"
-                  value={form.budgetValue}
-                  onChange={(e) => set("budgetValue")(e.target.value)}
+                  placeholder="e.g. Whitefield 3BHK turnkey"
+                  value={form.projectName}
+                  onChange={(e) => set("projectName")(e.target.value)}
                 />
-                {Number(form.budgetValue) > 0 && (
-                  <p className="text-xs text-muted-foreground">
-                    ≈ {formatBudget(Number(form.budgetValue))}
-                  </p>
-                )}
               </Field>
-              <Field label="Budget range">
-                <div className="flex h-11 items-center rounded-md border border-border bg-muted/40 px-3 text-sm text-muted-foreground">
-                  {form.budgetValue
-                    ? (BUDGET_RANGES.find(
-                        (r) =>
-                          Number(form.budgetValue) >= r.min && Number(form.budgetValue) < r.max,
-                      )?.label ?? "—")
-                    : "Set a budget to see the range"}
-                </div>
-              </Field>
-              <Field label="Lead status">
-                <Select value={form.stage} onValueChange={set("stage")}>
+              <Field label="Sales owner">
+                <Select value={form.salesOwner} onValueChange={set("salesOwner")}>
                   <SelectTrigger className="h-11 w-full">
-                    <SelectValue />
+                    <SelectValue placeholder="Select sales owner" />
                   </SelectTrigger>
                   <SelectContent>
-                    {statuses.map((o) => (
-                      <SelectItem key={o} value={o}>
-                        {o}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Source">
-                <Select value={form.source} onValueChange={set("source")}>
-                  <SelectTrigger className="h-11 w-full">
-                    <SelectValue placeholder="Select source" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={ALL}>Select source</SelectItem>
-                    {LEAD_SOURCES.map((o) => (
+                    <SelectItem value={ALL}>Select sales owner</SelectItem>
+                    {LEAD_OWNERS.map((o) => (
                       <SelectItem key={o} value={o}>
                         {o}
                       </SelectItem>
@@ -522,35 +474,201 @@ export function CreateLeadPanel({
                   </SelectContent>
                 </Select>
               </Field>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <DateField
-                  label="Expected start"
-                  value={form.startDate}
-                  onChange={set("startDate")}
+              <Field label="Status">
+                <Select value={form.stage} onValueChange={set("stage")}>
+                  <SelectTrigger className="h-11 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {statuses.map((o) => (
+                      <SelectItem key={o} value={o}>
+                        {o}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label="Budget (₹)">
+                <Input
+                  type="number"
+                  min={0}
+                  className="h-11"
+                  placeholder="e.g. 2800000"
+                  value={form.budgetValue}
+                  onChange={(e) => set("budgetValue")(e.target.value)}
                 />
-                <DateField
-                  label="Follow-up date"
-                  value={form.followUp}
-                  onChange={set("followUp")}
+                {Number(form.budgetValue) > 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    ≈ {formatBudget(Number(form.budgetValue))}
+                    {" · "}
+                    {BUDGET_RANGES.find(
+                      (r) => Number(form.budgetValue) >= r.min && Number(form.budgetValue) < r.max,
+                    )?.label ?? "—"}
+                  </p>
+                )}
+              </Field>
+              <Field label="Scope">
+                <Select value={form.workType} onValueChange={set("workType")}>
+                  <SelectTrigger className="h-11 w-full">
+                    <SelectValue placeholder="Select scope" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={ALL}>Select scope</SelectItem>
+                    {WORK_TYPES.map((o) => (
+                      <SelectItem key={o} value={o}>
+                        {o}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <DateField
+                label="Tentative start date"
+                value={form.tentativeStart}
+                onChange={set("tentativeStart")}
+              />
+              <Field label="Financial year">
+                <Select value={form.financialYear} onValueChange={set("financialYear")}>
+                  <SelectTrigger className="h-11 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {FINANCIAL_YEARS.map((o) => (
+                      <SelectItem key={o} value={o}>
+                        {o}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+            </div>
+            <div className="mt-4 grid gap-4">
+              <Field label="Description">
+                <Textarea
+                  rows={3}
+                  className="resize-none"
+                  placeholder="One requirement per line — e.g. modular kitchen with island, warm wood palette, possession in 12 weeks…"
+                  value={form.description}
+                  onChange={(e) => set("description")(e.target.value)}
+                  aria-label="Description"
                 />
-              </div>
+              </Field>
+              <Field label="Latest remark">
+                <Textarea
+                  rows={2}
+                  className="resize-none"
+                  placeholder="e.g. Client asked for a revised quotation by Friday…"
+                  value={form.latestRemark}
+                  onChange={(e) => set("latestRemark")(e.target.value)}
+                  aria-label="Latest remark"
+                />
+              </Field>
             </div>
           </FormSection>
 
           <FormSection
-            id="lead-section-notes"
-            title="Description / requirements"
-            open={openSections.notes}
-            onOpenChange={setSection("notes")}
+            id="lead-section-additional"
+            title="Additional information"
+            open={openSections.additional}
+            onOpenChange={setSection("additional")}
           >
-            <Textarea
-              rows={3}
-              className="resize-none"
-              placeholder="One requirement per line — e.g. modular kitchen with island, warm wood palette, possesion in 12 weeks…"
-              value={form.description}
-              onChange={(e) => set("description")(e.target.value)}
-              aria-label="Description / requirements"
-            />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Source">
+                <Select value={form.source} onValueChange={set("source")}>
+                  <SelectTrigger className="h-11 w-full">
+                    <SelectValue placeholder="Select source" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={ALL}>Select source</SelectItem>
+                    {LEAD_SOURCES.map((o) => (
+                      <SelectItem key={o} value={o}>
+                        {o}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label="City">
+                <Input
+                  className="h-11"
+                  placeholder="e.g. Bengaluru"
+                  value={form.city}
+                  onChange={(e) => set("city")(e.target.value)}
+                />
+              </Field>
+              <Field label="Site locality / address">
+                <Input
+                  className="h-11"
+                  placeholder="e.g. Whitefield, Bengaluru"
+                  value={form.locality}
+                  onChange={(e) => set("locality")(e.target.value)}
+                />
+              </Field>
+              <Field label="Property type">
+                <Select value={form.propertyType} onValueChange={set("propertyType")}>
+                  <SelectTrigger className="h-11 w-full">
+                    <SelectValue placeholder="Select property type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={ALL}>Select property type</SelectItem>
+                    {PROPERTY_TYPES.map((o) => (
+                      <SelectItem key={o} value={o}>
+                        {o}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label="Estimated area (sq ft)">
+                <Input
+                  type="number"
+                  min={0}
+                  className="h-11"
+                  placeholder="e.g. 1850"
+                  value={form.areaSqft}
+                  onChange={(e) => set("areaSqft")(e.target.value)}
+                />
+              </Field>
+              <Field label="Meta details">
+                <Input
+                  className="h-11"
+                  placeholder="e.g. Meta lead ad, campaign Spring26"
+                  value={form.metaDetails}
+                  onChange={(e) => set("metaDetails")(e.target.value)}
+                />
+              </Field>
+              <Field label="Rating">
+                <Select value={form.rating} onValueChange={set("rating")}>
+                  <SelectTrigger className="h-11 w-full">
+                    <SelectValue placeholder="Select rating" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={ALL}>Not rated</SelectItem>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <SelectItem key={n} value={`${n}`}>
+                        {n} / 5
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label="Tags">
+                <Input
+                  className="h-11"
+                  placeholder="e.g. premium, referral, hot"
+                  value={form.tags}
+                  onChange={(e) => set("tags")(e.target.value)}
+                />
+              </Field>
+              <Field label="Tax IDs">
+                <Input
+                  className="h-11"
+                  placeholder="e.g. 29ABCDE1234F1Z5, ABCDE1234F"
+                  value={form.taxIds}
+                  onChange={(e) => set("taxIds")(e.target.value)}
+                />
+              </Field>
+            </div>
           </FormSection>
 
           <SheetFooter>

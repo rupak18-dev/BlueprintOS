@@ -16,13 +16,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { leads, type Lead } from "@/data/mock";
+import { formatDateDMY } from "@/lib/export-csv";
+import { loadExtraLeads } from "@/lib/lead-form-storage";
+
+function findLead(leadId?: string): Lead | undefined {
+  if (!leadId) return undefined;
+  return loadExtraLeads().find((l) => l.id === leadId) ?? leads.find((l) => l.id === leadId);
+}
 
 export default function LeadDetailPage() {
   const { leadId } = useParams();
-  const [lead, setLead] = useState<Lead | undefined>(() => leads.find((l) => l.id === leadId));
+  const [lead, setLead] = useState<Lead | undefined>(() => findLead(leadId));
 
   useEffect(() => {
-    setLead(leads.find((l) => l.id === leadId));
+    setLead(findLead(leadId));
   }, [leadId]);
 
   if (!lead) return <NotFoundPage />;
@@ -76,10 +83,31 @@ export default function LeadDetailPage() {
             <DetailList
               items={[
                 { label: "Contact", value: lead.contact },
+                { label: "Role", value: lead.role || "—" },
                 { label: "Phone", value: lead.phone },
+                {
+                  label: "Alt. numbers",
+                  value:
+                    lead.alternatePhones && lead.alternatePhones.length > 0
+                      ? lead.alternatePhones.join(", ")
+                      : "—",
+                },
+                { label: "Email", value: lead.email || "—" },
                 { label: "City", value: lead.city },
                 { label: "Scope", value: lead.scope },
                 { label: "Budget", value: lead.budget },
+                { label: "Sales owner", value: lead.salesOwner || "—" },
+                { label: "Assigned to", value: lead.owner },
+                {
+                  label: "Tentative start",
+                  value: lead.tentativeStart ? formatDateDMY(lead.tentativeStart) : "—",
+                },
+                { label: "Financial year", value: lead.financialYear || "—" },
+                { label: "Latest remark", value: lead.latestRemark || "—" },
+                { label: "Meta details", value: lead.metaDetails || "—" },
+                { label: "Rating", value: lead.rating ? `${lead.rating} / 5` : "—" },
+                { label: "Tags", value: lead.tags?.length ? lead.tags.join(", ") : "—" },
+                { label: "Tax IDs", value: lead.taxIds || "—" },
                 { label: "Last update", value: lead.updated },
               ]}
             />

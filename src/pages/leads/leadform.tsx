@@ -193,7 +193,7 @@ function toLead(values: Values, nextId: string): Lead {
     scope: workType,
     budget: budgetDigits > 0 ? formatBudget(budgetDigits) : "—",
     budgetValue: budgetDigits,
-    stage: "New",
+    stage: "Created",
     source: "Lead form",
     owner: LEAD_OWNERS[0] ?? "Unassigned",
     updated: "Just now",
