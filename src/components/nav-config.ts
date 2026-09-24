@@ -15,8 +15,8 @@ import {
   Truck,
   ListChecks,
   Wrench,
-  type LucideIcon,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export type NavItem = { label: string; to: string; icon: LucideIcon };
 export type NavGroup = { group: string; icon: LucideIcon; items: NavItem[] };

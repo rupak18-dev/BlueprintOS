@@ -258,7 +258,7 @@ export function CreateLeadPanel({
       budgetValue,
       stage: form.stage,
       source: form.source === ALL ? "Website" : form.source,
-      owner: form.owner === ALL ? LEAD_OWNERS[0] : form.owner,
+      owner: form.owner === ALL ? (LEAD_OWNERS[0] ?? "Unassigned") : form.owner,
       updated: "Just now",
       createdAt: new Date().toISOString().slice(0, 10),
       description: form.description,

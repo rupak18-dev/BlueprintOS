@@ -15,8 +15,8 @@ import {
   Plug,
   Settings,
   UserCog,
-  type LucideIcon,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { navGroups, mobileBarItems, type NavItem } from "@/components/nav-config";
 import { useAuth } from "@/context/auth-context";
@@ -133,7 +133,7 @@ function GroupToggle({
   );
 }
 
-function SettingsGroup({ onNavigate }: { onNavigate?: () => void }) {
+function SettingsGroup({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   const pathname = useActivePath();
   const [open, setOpen] = useState(() => pathname === "/integrations" || pathname === "/profile");
 

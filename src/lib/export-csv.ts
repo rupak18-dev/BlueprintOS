@@ -10,34 +10,45 @@ export function formatDateDMY(iso: string): string {
   return y && m && d ? `${d}-${m}-${y}` : iso;
 }
 
-export function exportLeadsCsv(rows: Lead[], filename = "leads-export.csv"): number {
-  const header = [
-    "ID",
-    "Contact",
-    "Project",
-    "City",
-    "Stage",
-    "Source",
-    "Owner",
-    "Budget",
-    "Created",
-  ];
-  const lines = rows.map((l) =>
-    [
-      l.id,
-      l.contact,
-      l.name,
-      l.city,
-      l.stage,
-      l.source,
-      l.owner,
-      l.budget,
-      formatDateDMY(l.createdAt),
-    ]
-      .map(escapeCell)
-      .join(","),
-  );
-  const csv = [header.join(","), ...lines].join("\n");
+type CsvField = { header: string; value: (l: Lead) => string | number };
+
+const COLUMN_FIELDS: Record<string, CsvField> = {
+  name: { header: "Client name", value: (l) => l.contact },
+  info: { header: "Client info", value: (l) => l.email },
+  source: { header: "Source", value: (l) => l.source },
+  status: { header: "Stage", value: (l) => l.stage },
+  budget: { header: "Budget", value: (l) => l.budget },
+  owner: { header: "Assigned to", value: (l) => l.owner },
+  description: { header: "Description", value: (l) => l.description },
+};
+
+export function exportLeadsCsv(
+  rows: Lead[],
+  filename = "leads-export.csv",
+  columns: string[] = [],
+): number {
+  const fields: CsvField[] = [{ header: "ID", value: (l) => l.id }];
+  if (columns.length > 0) {
+    for (const key of columns) {
+      const field = COLUMN_FIELDS[key];
+      if (field) fields.push(field);
+    }
+  } else {
+    fields.push(
+      { header: "Contact", value: (l) => l.contact },
+      { header: "Project", value: (l) => l.name },
+      { header: "City", value: (l) => l.city },
+      { header: "Stage", value: (l) => l.stage },
+      { header: "Source", value: (l) => l.source },
+      { header: "Owner", value: (l) => l.owner },
+      { header: "Budget", value: (l) => l.budget },
+    );
+  }
+  fields.push({ header: "Created", value: (l) => formatDateDMY(l.createdAt) });
+
+  const header = fields.map((f) => f.header).join(",");
+  const lines = rows.map((l) => fields.map((f) => escapeCell(f.value(l))).join(","));
+  const csv = [header, ...lines].join("\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");

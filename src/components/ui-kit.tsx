@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -53,12 +53,12 @@ export function StatCard({
 }) {
   return (
     <Card className={cn("gap-0 py-4", accent && "border-brass/50 bg-accent/40")}>
-      <CardContent className="px-4">
+      <CardContent className="flex min-h-[104px] flex-col justify-center px-4">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground break-words">
           {label}
         </p>
-        <p className="mt-2 text-xl font-bold sm:text-2xl">{value}</p>
-        {hint && <p className="mt-1 truncate text-xs text-muted-foreground">{hint}</p>}
+        <p className="mt-3 text-xl font-bold sm:text-2xl">{value}</p>
+        {hint && <p className="mt-2 truncate text-xs text-muted-foreground">{hint}</p>}
       </CardContent>
     </Card>
   );
@@ -112,11 +112,13 @@ export function ResponsiveTable<T extends { id: string }>({
   columns,
   rows,
   empty = "Nothing here yet.",
+  headerClassName,
 }: {
   columns: Column<T>[];
   rows: T[];
   renderCardAction?: (row: T) => ReactNode;
   empty?: string;
+  headerClassName?: string;
 }) {
   const cellPad = "px-4 py-3";
   const headPad = "px-4 py-3";
@@ -138,11 +140,12 @@ export function ResponsiveTable<T extends { id: string }>({
       <div className="min-w-[880px]">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="hover:bg-transparent">
               {columns.map((c) => (
                 <TableHead
                   key={c.key}
                   className={cn(
+                    headerClassName,
                     hideClass(c.hide),
                     headPad,
                     "whitespace-nowrap",
@@ -187,34 +190,35 @@ const toneMap: Record<string, string> = {
   Won: "bg-success/15 text-success border-success/30",
   Overdue: "bg-destructive/15 text-destructive border-destructive/30",
   Lost: "bg-destructive/15 text-destructive border-destructive/30",
-  "In progress": "bg-brass/20 text-brass-foreground border-brass/40",
-  "In transit": "bg-brass/20 text-brass-foreground border-brass/40",
-  "In review": "bg-brass/20 text-brass-foreground border-brass/40",
-  "In production": "bg-brass/20 text-brass-foreground border-brass/40",
-  New: "bg-brass/15 text-brass-foreground border-brass/40",
+  "In progress": "bg-brass/15 text-brass border-brass/30",
+  "In transit": "bg-brass/15 text-brass border-brass/30",
+  "In review": "bg-brass/15 text-brass border-brass/30",
+  "In production": "bg-brass/15 text-brass border-brass/30",
+  New: "bg-brass/15 text-brass border-brass/30",
   Qualified: "bg-warning/15 text-warning border-warning/30",
   "Site visit": "bg-warning/15 text-warning border-warning/30",
-  Quotation: "bg-brass/20 text-brass-foreground border-brass/40",
+  Quotation: "bg-brass/15 text-brass border-brass/30",
   Negotiation: "bg-warning/15 text-warning border-warning/30",
 };
+
+export function statusToneClass(value: string): string {
+  return toneMap[value] || "bg-muted text-muted-foreground border-border";
+}
+
+export function statusSoftStyle(color: string): CSSProperties {
+  return {
+    backgroundColor: `color-mix(in srgb, ${color} 16%, transparent)`,
+    borderColor: `color-mix(in srgb, ${color} 35%, transparent)`,
+    color,
+  };
+}
 
 export function StatusPill({ value, color }: { value: string; color?: string | undefined }) {
   return (
     <Badge
       variant="outline"
-      className={cn(
-        "whitespace-nowrap font-medium",
-        !color && (toneMap[value] || "bg-muted text-muted-foreground"),
-      )}
-      style={
-        color
-          ? {
-              backgroundColor: `color-mix(in oklab, ${color} 14%, transparent)`,
-              borderColor: `color-mix(in oklab, ${color} 38%, transparent)`,
-              color: `color-mix(in oklab, ${color} 65%, var(--foreground))`,
-            }
-          : undefined
-      }
+      className={cn("whitespace-nowrap font-medium", !color && statusToneClass(value))}
+      style={color ? statusSoftStyle(color) : undefined}
     >
       {value}
     </Badge>

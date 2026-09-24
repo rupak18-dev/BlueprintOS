@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   CalendarDays,
   Check,
@@ -8,9 +8,11 @@ import {
   ClipboardList,
   Download,
   Funnel,
+  Lock,
   Plus,
   Search,
   Settings2,
+  SlidersHorizontal,
   Tags,
   Trash2,
 } from "lucide-react";
@@ -21,8 +23,9 @@ import {
   PageHeader,
   StatCard,
   StatGrid,
-  StatusPill,
   ResponsiveTable,
+  statusSoftStyle,
+  statusToneClass,
   type Column,
 } from "@/components/ui-kit";
 import {
@@ -73,8 +76,9 @@ import {
 import { CreateLeadPanel } from "./create-lead-panel";
 import { ManageStatusesPanel } from "./manage-statuses-panel";
 import { DateRangePopover, type DateRange } from "./date-range-popover";
-import { LeadFormDialog, type LeadFormData } from "./lead-form-dialog";
 import { exportLeadsCsv } from "@/lib/export-csv";
+import { loadExtraLeads } from "@/lib/lead-form-storage";
+import { cn } from "@/lib/utils";
 import { DEFAULT_STATUS_COLOR, loadCustomStatuses, saveCustomStatuses } from "@/lib/lead-storage";
 
 const ALL = "__all";
@@ -86,6 +90,16 @@ const DIMS = [
   { value: "owner", label: "Assigned to" },
   { value: "location", label: "Location" },
   { value: "budget", label: "Budget" },
+] as const;
+
+const COLUMN_OPTIONS = [
+  { key: "name", label: "Client name", locked: true },
+  { key: "info", label: "Client info", locked: true },
+  { key: "source", label: "Source" },
+  { key: "status", label: "Status" },
+  { key: "budget", label: "Budget" },
+  { key: "owner", label: "Assigned to" },
+  { key: "description", label: "Description" },
 ] as const;
 
 type FilterBy = (typeof DIMS)[number]["value"];
@@ -138,7 +152,7 @@ function columnDefs(
   statuses: string[],
   colors: Record<string, string>,
   onChangeStatus: (id: string, stage: string) => void,
-) {
+): Column<Lead>[] {
   return [
     {
       key: "name",
@@ -166,20 +180,27 @@ function columnDefs(
     {
       key: "status",
       header: "Status",
-      cell: (l: Lead) => (
-        <Select value={l.stage} onValueChange={(v) => onChangeStatus(l.id, v)}>
-          <SelectTrigger className="h-8 gap-2 px-1.5" aria-label={`Change status for ${l.contact}`}>
-            <StatusPill value={l.stage} color={colors[l.stage]} />
-          </SelectTrigger>
-          <SelectContent>
-            {statuses.map((o) => (
-              <SelectItem key={o} value={o}>
-                {o}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ),
+      cell: (l: Lead) => {
+        const color = colors[l.stage];
+        return (
+          <Select value={l.stage} onValueChange={(v) => onChangeStatus(l.id, v)}>
+            <SelectTrigger
+              className={cn("h-8 gap-1.5 px-2 font-medium", !color && statusToneClass(l.stage))}
+              style={color ? statusSoftStyle(color) : undefined}
+              aria-label={`Change status for ${l.contact}`}
+            >
+              <span className="max-w-40 truncate">{l.stage}</span>
+            </SelectTrigger>
+            <SelectContent>
+              {statuses.map((o) => (
+                <SelectItem key={o} value={o}>
+                  {o}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        );
+      },
     },
     { key: "budget", header: "Budget", cell: (l: Lead) => l.budget },
     { key: "owner", header: "Assigned to", cell: (l: Lead) => l.owner, hide: "lg" },
@@ -196,7 +217,69 @@ function columnDefs(
   ];
 }
 
-function ManageFiltersPopover({
+function ManageColumnsPopover({
+  hidden,
+  onToggleColumn,
+}: {
+  hidden: ReadonlySet<string>;
+  onToggleColumn: (key: string) => void;
+}) {
+  const showAllColumns = () =>
+    COLUMN_OPTIONS.filter((c) => !c.locked && hidden.has(c.key)).forEach((c) =>
+      onToggleColumn(c.key),
+    );
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="h-9 w-full text-sm sm:w-auto">
+          <Funnel className="size-4" /> Manage columns
+          {hidden.size > 0 && (
+            <span className="ml-1 inline-flex size-5 items-center justify-center rounded-full bg-brass text-[11px] font-semibold text-brass-foreground">
+              {hidden.size}
+            </span>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="max-h-[85vh] w-80 overflow-y-auto" align="end">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold">Manage columns</h3>
+          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={showAllColumns}>
+            Show all
+          </Button>
+        </div>
+
+        <div>
+          {COLUMN_OPTIONS.map((col) => {
+            const locked = col.locked;
+            const visible = !hidden.has(col.key);
+            return (
+              <label
+                key={col.key}
+                className={cn(
+                  "flex h-8 cursor-pointer items-center gap-2 rounded-md px-2 text-xs",
+                  locked && "cursor-not-allowed",
+                  !visible && "text-muted-foreground",
+                )}
+              >
+                <Checkbox
+                  checked={visible}
+                  disabled={locked}
+                  onCheckedChange={() => onToggleColumn(col.key)}
+                  className="size-4 rounded-full data-[state=checked]:bg-brass data-[state=checked]:text-brass-foreground"
+                />
+                <span className={cn("min-w-0 truncate", locked && "font-medium")}>{col.label}</span>
+                {locked && <Lock className="ml-auto size-3.5 shrink-0 text-muted-foreground" />}
+              </label>
+            );
+          })}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function FiltersPopover({
   value,
   onChange,
   statuses,
@@ -226,7 +309,7 @@ function ManageFiltersPopover({
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" className="h-9 w-full text-sm sm:w-auto">
-          <Funnel className="size-4" /> Manage filters
+          <SlidersHorizontal className="size-4" /> Filters
           {activeCount > 0 && (
             <span className="ml-1 inline-flex size-5 items-center justify-center rounded-full bg-brass text-[11px] font-semibold text-brass-foreground">
               {activeCount}
@@ -234,13 +317,13 @@ function ManageFiltersPopover({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80" align="end">
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold">Manage filters</h3>
+      <PopoverContent className="max-h-[85vh] w-80 overflow-y-auto" align="end">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold">Filters</h3>
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 px-2 text-xs"
+            className="h-7 px-2 text-xs text-destructive hover:text-destructive"
             onClick={() => setDraft(emptyAdvanced)}
           >
             Clear all
@@ -340,7 +423,8 @@ function pageNumbers(current: number, total: number): (number | "…")[] {
 const storedCustomStatuses = loadCustomStatuses(LEAD_STATUSES);
 
 export default function LeadsPage() {
-  const [rows, setRows] = useState<Lead[]>(seedLeads);
+  const navigate = useNavigate();
+  const [rows, setRows] = useState<Lead[]>(() => [...loadExtraLeads(), ...seedLeads]);
   const [statuses, setStatuses] = useState<string[]>(() => [
     ...LEAD_STATUSES,
     ...storedCustomStatuses.map((s) => s.name),
@@ -352,8 +436,8 @@ export default function LeadsPage() {
   const [filterBy, setFilterBy] = useState<FilterBy>("status");
   const [filterValue, setFilterValue] = useState<string>(ALL);
   const [advanced, setAdvanced] = useState<AdvancedFilters>(emptyAdvanced);
+  const [hiddenCols, setHiddenCols] = useState<Set<string>>(new Set());
   const [createOpen, setCreateOpen] = useState(false);
-  const [leadFormOpen, setLeadFormOpen] = useState(false);
   const [statusOpen, setStatusOpen] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -430,12 +514,26 @@ export default function LeadsPage() {
     setRows((prev) => prev.map((l) => (l.id === id ? { ...l, stage, updated: "Just now" } : l)));
   }, []);
 
+  const toggleColumn = (key: string) => {
+    const locked = COLUMN_OPTIONS.find((c) => c.key === key)?.locked;
+    if (locked) return;
+    setHiddenCols((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
   const toggleSelectMode = () => {
-    if (selectMode) {
-      setSelected(new Set());
-      setBulkStatus("");
-    }
+    setBulkStatus("");
     setSelectMode((v) => !v);
+  };
+
+  const clearSelection = () => {
+    setSelected(new Set());
+    setBulkStatus("");
+    setSelectMode(false);
   };
 
   const applyBulkStatus = () => {
@@ -445,6 +543,7 @@ export default function LeadsPage() {
       prev.map((l) => (selected.has(l.id) ? { ...l, stage: bulkStatus, updated: "Just now" } : l)),
     );
     toast.success("Status updated", { description: `${count} lead(s) moved to ${bulkStatus}.` });
+    setSelected(new Set());
     setBulkStatus("");
   };
 
@@ -488,8 +587,18 @@ export default function LeadsPage() {
   };
 
   const exportFiltered = () => {
-    const count = exportLeadsCsv(filtered);
+    const visibleColumns = COLUMN_OPTIONS.filter((c) => !hiddenCols.has(c.key)).map((c) => c.key);
+    const count = exportLeadsCsv(filtered, "leads-export.csv", visibleColumns);
     toast.success("Leads exported", { description: `${count} lead(s) saved to CSV.` });
+  };
+
+  const exportSelected = () => {
+    const selectedRows = rows.filter((l) => selected.has(l.id));
+    const visibleColumns = COLUMN_OPTIONS.filter((c) => !hiddenCols.has(c.key)).map((c) => c.key);
+    const count = exportLeadsCsv(selectedRows, "leads-selected.csv", visibleColumns);
+    toast.success("Selected leads exported", {
+      description: `${count} selected lead(s) saved to CSV.`,
+    });
   };
 
   const deleteStatus = (name: string) => {
@@ -551,7 +660,9 @@ export default function LeadsPage() {
         ),
       });
     }
-    cols.push(...columnDefs(statuses, statusColors, changeStatus));
+    cols.push(
+      ...columnDefs(statuses, statusColors, changeStatus).filter((c) => !hiddenCols.has(c.key)),
+    );
     return cols;
   }, [
     selectMode,
@@ -562,6 +673,7 @@ export default function LeadsPage() {
     statuses,
     statusColors,
     changeStatus,
+    hiddenCols,
   ]);
 
   const nextLeadId = () =>
@@ -570,14 +682,6 @@ export default function LeadsPage() {
   const handleCreate = (lead: Lead) => {
     setRows((prev) => [lead, ...prev]);
     toast.success(`Lead created`, { description: `${lead.name} added to the pipeline.` });
-  };
-
-  const handleFeedback = (feedback: LeadFormData) => {
-    toast.success("Client feedback saved", {
-      description: feedback.contact
-        ? `Data captured for ${feedback.contact}.`
-        : "Lead form submitted.",
-    });
   };
 
   return (
@@ -589,10 +693,10 @@ export default function LeadsPage() {
 
       <PageHeader
         title="Leads"
-        subtitle="Capture the enquiry, understand requirements, quote, and convert to a project."
+        subtitle="Turn client interest into your next signature project."
         actions={
           <>
-            <Button size="sm" variant="outline" onClick={() => setLeadFormOpen(true)}>
+            <Button size="sm" variant="outline" onClick={() => navigate("/leads/customize")}>
               <ClipboardList className="size-4" /> Lead form
             </Button>
             <Button size="sm" onClick={() => setCreateOpen(true)}>
@@ -612,13 +716,13 @@ export default function LeadsPage() {
         <StatCard
           label="Lead count"
           value={`${rows.length}`}
-          hint="enquiries in the pipeline"
+          hint="enquiries currently being explored"
           accent
         />
         <StatCard
           label="Lead value"
           value={formatBudget(totalValue)}
-          hint="aggregate budget across all leads"
+          hint="estimated across active leads"
         />
         <StatCard label="Open leads" value={`${openCount}`} hint="in active pipeline" />
         <StatCard label="Won leads" value={`${wonCount}`} hint={`${conversionRate}% conversion`} />
@@ -682,7 +786,11 @@ export default function LeadsPage() {
             </div>
 
             <div className="min-w-0 grow basis-full sm:basis-auto sm:grow-0">
-              <ManageFiltersPopover
+              <ManageColumnsPopover hidden={hiddenCols} onToggleColumn={toggleColumn} />
+            </div>
+
+            <div className="min-w-0 grow basis-full sm:basis-auto sm:grow-0">
+              <FiltersPopover
                 value={advanced}
                 onChange={setAdvanced}
                 statuses={statuses}
@@ -696,7 +804,7 @@ export default function LeadsPage() {
           </div>
         </div>
 
-        {selectMode && selected.size > 0 && (
+        {selected.size > 0 && (
           <div className="flex flex-wrap items-center gap-2 border-b border-border bg-muted/40 px-3 py-2.5 sm:px-4">
             <span className="text-sm font-medium">{selected.size} selected</span>
             <span className="hidden h-4 w-px bg-border sm:block" />
@@ -726,6 +834,9 @@ export default function LeadsPage() {
                 Apply
               </Button>
             </div>
+            <Button size="sm" variant="outline" className="shrink-0" onClick={exportSelected}>
+              <Download className="size-4" /> Export
+            </Button>
             <Button
               size="sm"
               variant="destructive"
@@ -734,7 +845,7 @@ export default function LeadsPage() {
             >
               <Trash2 className="size-4" /> Delete
             </Button>
-            <Button size="sm" variant="ghost" className="shrink-0" onClick={toggleSelectMode}>
+            <Button size="sm" variant="ghost" className="shrink-0" onClick={clearSelection}>
               Done
             </Button>
           </div>
@@ -744,6 +855,7 @@ export default function LeadsPage() {
           columns={tableColumns}
           rows={pageRows}
           empty="No leads match your filters."
+          headerClassName="bg-brass/40 font-semibold text-brass-foreground dark:text-brass"
         />
       </div>
 
@@ -819,12 +931,6 @@ export default function LeadsPage() {
         nextId={nextLeadId()}
         statuses={statuses}
         onCreate={handleCreate}
-      />
-      <LeadFormDialog
-        open={leadFormOpen}
-        onOpenChange={setLeadFormOpen}
-        statuses={statuses}
-        onSubmit={handleFeedback}
       />
       <ManageStatusesPanel
         open={statusOpen}

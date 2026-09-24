@@ -18,6 +18,8 @@ import CalendarPage from "@/pages/dashboard/calendar";
 
 import LeadsPage from "@/pages/leads/leads";
 import LeadDetailPage from "@/pages/leads/lead-detail";
+import StudioEditorPage from "@/pages/leads/customize/StudioEditor";
+import LeadFormPage from "@/pages/leads/leadform";
 
 import ProjectsPage from "@/pages/projects/projects";
 import ProjectDetailPage from "@/pages/projects/project-detail";
@@ -52,6 +54,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/leadform" element={<LeadFormPage />} />
       </Route>
 
       <Route path="/login" element={<LoginPage />} />
@@ -63,6 +66,7 @@ export default function App() {
           <Route path="/calendar" element={<CalendarPage />} />
 
           <Route path="/leads" element={<LeadsPage />} />
+          <Route path="/leads/customize" element={<StudioEditorPage />} />
           <Route path="/leads/:leadId" element={<LeadDetailPage />} />
 
           <Route path="/projects" element={<ProjectsPage />} />

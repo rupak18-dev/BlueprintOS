@@ -96,7 +96,7 @@ export function DateRangePopover({
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 px-2 text-xs"
+            className="h-7 px-2 text-xs text-destructive hover:text-destructive"
             onClick={() => onChange({})}
           >
             Clear
